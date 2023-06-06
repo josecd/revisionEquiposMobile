@@ -1,0 +1,7 @@
+{
+  "name": "revisionEquiposMobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
