@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AgregarImagenObservacionComponent } from '../reportes/componentes/agregar-imagen-observacion/agregar-imagen-observacion.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-hoteles',
@@ -7,11 +9,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HotelesPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    public modalCtrl:ModalController
+  ) { }
 
   ngOnInit() {
     console.log("PAso por aqui");
     
   }
+  async openModal() {
+
+
+    const modal = await this.modalCtrl.create({
+      component: AgregarImagenObservacionComponent,
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+ 
+    
+  }
+
 
 }

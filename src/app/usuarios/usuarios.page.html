@@ -1,6 +1,9 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>usuarios</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Usuarios</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -10,4 +13,10 @@
       <ion-title size="large">usuarios</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-fab>
+    <ion-fab-button (click)="openModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

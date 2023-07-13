@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-buttons>
+    <ion-title>Imágenes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-button  expand="block" (click)="getPicture()">
+    <ion-icon name="image" slot="start"></ion-icon>
+    <ion-label>Subir imagenes</ion-label>
+  </ion-button>
+  <input type="file" multiple #filePicker (change)="onFileChoose($event)"/>
+
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Imagenes</ion-card-title>
+      <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
+    </ion-card-header>
+  
+    <ion-card-content *ngFor="let item of photos">
+      <img [src]="item">
+
+    </ion-card-content>
+  </ion-card>
+
+
+
+</ion-content>
+
+<ion-footer *ngIf="files.length > 0">
+      
+      <ion-button  expand="block" (click)="saveImage()">
+        <ion-icon name="image" slot="start"></ion-icon>
+        <ion-label>Guardar</ion-label>
+      </ion-button>
+      
+</ion-footer>
