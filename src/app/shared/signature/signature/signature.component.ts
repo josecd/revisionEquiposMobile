@@ -108,6 +108,8 @@ export class SignatureComponent implements OnInit, AfterViewInit {
         type: this.selectTipo,
         nombreFirma: this.nombre
       });
+      ScreenOrientation.unlock();
+
     }
 
   }
@@ -164,7 +166,8 @@ export class SignatureComponent implements OnInit, AfterViewInit {
   }
 
   return() {
-    this.modalCtrl.dismiss(this.imgFile, "return");
+    this.modalCtrl.dismiss(this.imgFile, "return")
+    ScreenOrientation.unlock();
   }
 
   handleChange(e: any) {

@@ -5,8 +5,10 @@ const config: CapacitorConfig = {
   appName: 'revisionEquiposMobile',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'https',
+    hostname: '172.30.121.102:3000',
   }
 };
+
 
 export default config;
