@@ -6,6 +6,7 @@ import { ReportesService } from "./services/reportes.service";
 import { BehaviorSubject } from "rxjs";
 import { SignatureComponent } from "../shared/signature/signature/signature.component";
 import { DetalleReporteComponent } from "./componentes/detalle-reporte/detalle-reporte.component";
+import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte.component";
 
 @Component({
   selector: "app-reportes",
@@ -23,6 +24,17 @@ export class ReportesPage implements OnInit {
     public modalCtrl:ModalController
   ) {
 
+  }
+
+  handleRefresh(event:any) {
+    this._reporte.getReportes().subscribe({
+      next: (data) => {
+        this.reportesList = data
+        console.log(data);
+      event.target.complete();
+      },
+      error(err) {},
+    });
   }
 
   public ngOnInit() {
@@ -57,6 +69,20 @@ export class ReportesPage implements OnInit {
     modal.present();
 
   }
+  async openModalReportes() {
+    
+    const modal = await this.modalCtrl.create({
+      component: CrearReporteComponent,
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if (data) {
+      this.reportes()
 
+    }else{
+      console.log(data);
+    }
+
+  }
   
 }

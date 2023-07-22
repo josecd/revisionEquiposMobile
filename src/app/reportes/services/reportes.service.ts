@@ -29,9 +29,41 @@ export class ReportesService {
 
   agregarFotosObservacion(datos:any){
     return this._httpClient.post(
-      environment.API_URL + "/reportes/firma",
+      environment.API_URL + "/observaciones/imgObservacion",
       datos
     );
   }
 
+  eliminarImgObsevacion(datos:any){
+    return this._httpClient.post(
+      environment.API_URL + "/observaciones/eliminarImgObservacion",
+      datos
+    );
+  }
+
+  eliminarFirma(datos:any){
+    return this._httpClient.post(
+      environment.API_URL + "/reportes/firmaEliminar",
+      datos
+    );
+  }
+
+  crearObservacionReporte(data:any){
+    return this._httpClient.post(
+      environment.API_URL + "/observaciones/crear",
+      data
+    );
+  }
+
+  getHoteles(){
+    return this._httpClient.get(environment.API_URL+'/hoteles');
+  }
+
+
+  crearReporte(data:any){
+    return this._httpClient.post(
+      environment.API_URL + "/reportes",
+      data
+    );
+  }
 }

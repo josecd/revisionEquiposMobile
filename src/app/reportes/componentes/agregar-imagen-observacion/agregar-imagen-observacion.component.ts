@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild, OnInit, Input } from '@angular/core';
 import { Capacitor } from '@capacitor/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { AlertController, ModalController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ReportesService } from '../../services/reportes.service';
 
@@ -11,7 +11,7 @@ import { ReportesService } from '../../services/reportes.service';
   styleUrls: ['./agregar-imagen-observacion.component.scss'],
 })
 export class AgregarImagenObservacionComponent  implements OnInit {
-  @Input() idReporte:any;
+  @Input() idObservacion:any;
   @ViewChild('filePicker', { static: false }) filePickerRef: ElementRef<HTMLInputElement>;
   photo: SafeResourceUrl;
   isDesktop: boolean;
@@ -23,16 +23,12 @@ export class AgregarImagenObservacionComponent  implements OnInit {
     private sanitizer: DomSanitizer,
     public modalCtrl: ModalController,
     private _reporte:ReportesService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private loadingCtrl: LoadingController
     ) { }
 
     ngOnInit() {
-    console.log(this.idReporte);
-
-    
       if ((this.platform.is('mobile') && this.platform.is('hybrid')) || this.platform.is('desktop')) {
-        console.log('entro');
-        
         this.isDesktop = true;
       }
     }
@@ -59,17 +55,24 @@ export class AgregarImagenObservacionComponent  implements OnInit {
   }
 
   async saveImage(){
+    const loading = await this.loadingCtrl.create({
+      message: 'Subiendo imagenes...',
+    });
+    loading.present();
+
     let formData = new FormData();
-    formData.append('observacionId',this.idReporte);
+    formData.append('observacionId',this.idObservacion);
     this.files.forEach((file:any) =>{
       formData.append('files[]', file)
     });
     this._reporte.agregarFotosObservacion(formData).subscribe({
       next: (data:any) => {
-        console.log(data);
-        this.modalCtrl.dismiss();
+        loading.dismiss();
+        this.modalCtrl.dismiss(true, "msg");
       },
       error: async (err)=>{
+        loading.dismiss();
+
         const alert = await this.alertController.create({
           header: 'Alerta',
           subHeader: 'Intente más tarde',
@@ -95,17 +98,18 @@ export class AgregarImagenObservacionComponent  implements OnInit {
     }
 
     reader.onload = () => {
-      this.photo = reader.result.toString();
+      console.log(reader.result.toString());
+      this.photo = reader.result.toString()
+      this.photos.push(reader.result.toString())
+      this.files.push( this.dataURItoBlob(reader.result.toString()))
     };
     reader.readAsDataURL(file);
-
+    console.log(file);
+    
   }
 
 
-  return() {
-    // this.modalCtrl.dismiss(this.imgFile, "return");
-    this.modalCtrl.dismiss();
-  }
+
   dataURItoBlob(dataURI: any) {
     var byteString = atob(dataURI.split(",")[1]);
     var mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
@@ -117,5 +121,8 @@ export class AgregarImagenObservacionComponent  implements OnInit {
     return new Blob([ab], { type: mimeString });
   }
 
-
+  return() {
+    // this.modalCtrl.dismiss(this.imgFile, "return");
+    this.modalCtrl.dismiss();
+  }
 }

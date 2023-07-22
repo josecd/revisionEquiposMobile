@@ -9,24 +9,10 @@
 
 <ion-content>
   
-  <ion-card *ngIf="false">
-    <ion-card-header>
-      <ion-card-title>Reportes</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      ⚡️ Capacitor plugin to lock/unlock the screen orientation.
-    </ion-card-content>
-    <ion-row class="ion-no-padding">
-      <ion-col>
-        <ion-button
-          fill="clear"
-          (click)="openOnGithub()"
-          class="ion-float-right"
-          >GitHub</ion-button
-        >
-      </ion-col>
-    </ion-row>
-  </ion-card>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
 
   <ion-card>
     <ion-card-header>
@@ -102,3 +88,17 @@
 
   </ion-card>
 </ion-content>
+
+    <!-- Botones para podeer agregar firmas y observaciones -->
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="chevron-up-circle"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <!-- Firma -->
+        <ion-fab-button (click)="openModalReportes()">
+          <ion-icon name="pencil-outline"></ion-icon>
+        </ion-fab-button>
+
+      </ion-fab-list>
+    </ion-fab>
