@@ -1,3 +1,88 @@
-<p>
-  crear-observacion works!
-</p>
+<ion-card>
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-buttons>
+      <ion-title>Observación</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card-content>
+    <!-- <ion-input label="Equipo" label-placement="floating" fill="outline" placeholder="Escribe equipo" [value]="equipo"
+      [ngModel]="equipo"></ion-input>
+    <br />
+    <ion-input label="Marca" label-placement="floating" fill="outline" placeholder="Escribe marca"
+      [ngModel]="marca"></ion-input>
+    <br />
+    <ion-input label="Modelo" label-placement="floating" fill="outline" placeholder="Escribe modelo"
+      [ngModel]="modelo"></ion-input>
+    <br />
+    <ion-input label="N° Serie" label-placement="floating" fill="outline" placeholder="Escribe N° serie"
+      [ngModel]="numeroSerie"></ion-input>
+    <br />
+    <ion-input label="Area" label-placement="floating" fill="outline" placeholder="Escribe area"
+      [ngModel]="area"></ion-input>
+    <br /> -->
+
+
+
+
+
+      <form [formGroup]="ionicForm" >
+
+        <ion-item lines="full">
+          <ion-label position="floating">equipo</ion-label>
+          <ion-input formControlName="equipo" type="text" aria-label="equipo"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">marca</ion-label>
+          <ion-input formControlName="marca" type="text" aria-label="marca"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">modelo</ion-label>
+          <ion-input formControlName="modelo" type="text" aria-label="modelo"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">numeroSerie</ion-label>
+          <ion-input formControlName="numeroSerie" type="text" aria-label="numeroSerie"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">area</ion-label>
+          <ion-input formControlName="area" type="text" aria-label="area  "></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">observacion</ion-label>
+          <ion-textarea formControlName="observacion"   [counter]="true"
+          ></ion-textarea>
+        </ion-item>
+
+
+
+
+        <ion-row>
+          <ion-col>
+            <ion-button type="submit" color="danger" expand="block" (click)="submitForm()">Guardar</ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+
+
+
+
+  </ion-card-content>
+</ion-card>
+
+<!-- <ion-footer>
+
+  <ion-button expand="block" >
+    <ion-icon name="image" slot="start"></ion-icon>
+    <ion-label>Guardar</ion-label>
+  </ion-button>
+
+</ion-footer> -->

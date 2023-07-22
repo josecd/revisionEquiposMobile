@@ -2,18 +2,21 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { ReportesService } from '../../services/reportes.service';
+
 @Component({
-  selector: 'app-crear-observacion',
-  templateUrl: './crear-observacion.component.html',
-  styleUrls: ['./crear-observacion.component.scss'],
+  selector: 'app-crear-reporte',
+  templateUrl: './crear-reporte.component.html',
+  styleUrls: ['./crear-reporte.component.scss'],
 })
-export class CrearObservacionComponent  implements OnInit {
+export class CrearReporteComponent  implements OnInit {
+
   @Input("idReporte") idReporte:any;
   // form : crearObservacionDto;
 
 
   ionicForm: FormGroup;
-
+  hoteles:any;
+  hotelSelect:any;
   constructor(
     public modalCtrl: ModalController,
     public formBuilder: FormBuilder,
@@ -26,15 +29,21 @@ export class CrearObservacionComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.ionicForm = this.formBuilder.group({
-      equipo: ['',],
-      marca: [''],
-      modelo: ['',],
-      numeroSerie: ['',],
-      area: ['',],
-      observacion: ['',],
-      reporteId:[this.idReporte],
+    this._reporte.getHoteles().subscribe({
+      next: (data) => {
+        this.hoteles = data
+        console.log(data);
+      },
+      error(err) {},
     });
+
+
+    this.ionicForm = this.formBuilder.group({
+      recomendaciones: ['',],
+      hotelId: [''],
+      userlId:['1'],
+    });
+
   }
 
   // submitForm = () => {
@@ -50,13 +59,15 @@ export class CrearObservacionComponent  implements OnInit {
   
   async submitForm(){
     const loading = await this.loadingCtrl.create({
-      message: 'Subiendo imagenes...',
+      message: 'Subiendo información...',
     });
     loading.present();
 
 
-    this._reporte.crearObservacionReporte(this.ionicForm.value).subscribe({
+    this._reporte.crearReporte(this.ionicForm.value).subscribe({
       next: (data:any) => {
+        console.log(data);
+        
         loading.dismiss();
         this.modalCtrl.dismiss(true, "msg");
       },
@@ -75,6 +86,10 @@ export class CrearObservacionComponent  implements OnInit {
   }
 
 
+  handleChange(ev:any) {
+    this.ionicForm.value['hotelId'] = ev.target.value;
+    this.hotelSelect = ev.target.value;
+  }
 
   return() {
     // this.modalCtrl.dismiss(this.imgFile, "return");

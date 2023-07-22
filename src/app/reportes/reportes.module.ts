@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { IonicModule } from "@ionic/angular";
 
@@ -10,6 +10,8 @@ import { ReportesPage } from "./reportes.page";
 import { HttpClientModule } from "@angular/common/http";
 import { DetalleReporteComponent } from "./componentes/detalle-reporte/detalle-reporte.component";
 import { AgregarImagenObservacionComponent } from "./componentes/agregar-imagen-observacion/agregar-imagen-observacion.component";
+import { CrearObservacionComponent } from "./componentes/crear-observacion/crear-observacion.component";
+import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte.component";
 
 @NgModule({
   imports: [
@@ -18,11 +20,14 @@ import { AgregarImagenObservacionComponent } from "./componentes/agregar-imagen-
     IonicModule,
     ReportesPageRoutingModule,
     HttpClientModule,
+    ReactiveFormsModule
   ],
   declarations: [
     ReportesPage,
     DetalleReporteComponent,
-    AgregarImagenObservacionComponent
+    AgregarImagenObservacionComponent,
+    CrearObservacionComponent,
+    CrearReporteComponent
   ],
 })
 export class ReportesPageModule {}
