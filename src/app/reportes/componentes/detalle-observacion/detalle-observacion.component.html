@@ -91,21 +91,7 @@
 
 
 
-        <section *ngIf="informacionObs['observacionesImagen'].length == 0">
-          <ion-card *ngFor="let item of informacionObs['observacionesImagen']">
 
-            <ion-card-content >
-              <img style="
-              width: auto;
-              margin: auto;
-              display: block;" 
-              (click)="deleteImg(item)"
-              [src]="item['url']" />
-            </ion-card-content>
-  
-            <ion-card-subtitle>{{informacionObs.fechaRegistro | date}} </ion-card-subtitle>
-          </ion-card>
-        </section>
 
 
 
@@ -124,8 +110,23 @@
           <ion-label>Imágenes</ion-label>
         </ion-item>
   
-   
+        <div class="ion-padding" slot="content" *ngIf="informacionObs['observacionesImagen'].length > 0">
+          <ion-card *ngFor="let item of informacionObs['observacionesImagen']">
+
+            <ion-card-content >
+              <img style="
+              width: auto;
+              margin: auto;
+              display: block;" 
+              (click)="deleteImg(item)"
+              [src]="item['url']" />
+            </ion-card-content>
   
+            <ion-card-subtitle>{{item.fechaRegistro | date}} </ion-card-subtitle>
+          </ion-card>
+        </div>
+
+
         <div class="ion-padding" slot="content" *ngIf="informacionObs['observacionesImagen'].length == 0">
           <ion-grid>
             <ion-row>

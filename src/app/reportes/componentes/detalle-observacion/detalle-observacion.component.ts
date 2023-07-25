@@ -43,6 +43,8 @@ export class DetalleObservacionComponent implements OnInit {
         next: (res) => {
           console.log(res);
           this.informacionObs = res;
+          console.log(this.informacionObs['observacionesImagen']);
+          
         },
         error: (err) => {
 
@@ -141,4 +143,40 @@ export class DetalleObservacionComponent implements OnInit {
     // this.modalCtrl.dismiss(this.imgFile, "return");
     this.modalCtrl.dismiss();
   }
+
+  async  deleteImg(item:any){
+    console.log(item);
+      const alert = await this.alertController.create({
+        header: "Alerta",
+        message: "¿Desea eliminar imagen?",
+        buttons: [
+          {
+            text: "Cancelar",
+            role: "cancel",
+            handler: () => {
+              console.log("Declined the offer");
+            },
+          },
+          {
+            text: "Aceptar",
+            handler: async () => {
+              const loading = await this.loadingCtrl.create({
+                message: 'Borrando imagen...',
+              });
+              loading.present();
+  
+              this._reporte.eliminarImgObsevacion(item).subscribe({
+                next: (data) => {
+                  loading.dismiss();  
+                  this.load();
+                },
+                error(err) {},
+              });
+            },
+          },
+        ],
+      });
+    
+      await alert.present();
+    }
 }
