@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ReportesService } from '../../services/reportes.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-agregar-imagen-observacion',
@@ -18,19 +19,25 @@ export class AgregarImagenObservacionComponent  implements OnInit {
 
   photos:any=[];
   files:any=[];
+  userId :any;
   constructor(
     private platform: Platform,
     private sanitizer: DomSanitizer,
     public modalCtrl: ModalController,
     private _reporte:ReportesService,
     private alertController: AlertController,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private storage: Storage
+
     ) { }
 
-    ngOnInit() {
+    async ngOnInit() {
       if ((this.platform.is('mobile') && this.platform.is('hybrid')) || this.platform.is('desktop')) {
         this.isDesktop = true;
       }
+      const iduser=  await this.storage.get('user').then(res=>{
+        this.userId = res['idUsuario']
+       })
     }
 
   async getPicture() {
@@ -62,6 +69,10 @@ export class AgregarImagenObservacionComponent  implements OnInit {
 
     let formData = new FormData();
     formData.append('observacionId',this.idObservacion);
+    console.log('IDuser',this.userId);
+    
+    formData.append('userId',this.userId);
+
     this.files.forEach((file:any) =>{
       formData.append('files[]', file)
     });

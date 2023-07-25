@@ -8,9 +8,24 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">trabajadores</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button >Cancel</ion-button>
+        </ion-buttons>
+        <ion-title>Welcome</ion-title>
+        <ion-buttons slot="end">
+          <ion-button  [strong]="true">Confirm</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-item>
+        <ion-label position="stacked">Enter your name</ion-label>
+        <ion-input type="text" placeholder="Your name"></ion-input>
+      </ion-item>
+    </ion-content>
+
 </ion-content>

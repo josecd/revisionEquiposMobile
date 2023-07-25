@@ -32,6 +32,8 @@
     "@capawesome/capacitor-screen-orientation": "^5.0.0",
     "@ionic/angular": "^7.0.0",
     "@ionic/pwa-elements": "^3.2.1",
+    "@ionic/storage": "^4.0.0",
+    "@ionic/storage-angular": "^4.0.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "signature_pad": "^4.1.5",

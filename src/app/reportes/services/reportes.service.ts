@@ -66,4 +66,15 @@ export class ReportesService {
       data
     );
   }
+
+  getObservacion(id:any){
+    return this._httpClient.get(environment.API_URL+'/observaciones/'+id);
+  }
+
+  crearComentario(data:any){
+    return this._httpClient.post(
+      environment.API_URL + "/observaciones/agregarComentario",
+      data
+    );
+  }
 }

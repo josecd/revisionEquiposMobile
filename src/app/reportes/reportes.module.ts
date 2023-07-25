@@ -12,6 +12,7 @@ import { DetalleReporteComponent } from "./componentes/detalle-reporte/detalle-r
 import { AgregarImagenObservacionComponent } from "./componentes/agregar-imagen-observacion/agregar-imagen-observacion.component";
 import { CrearObservacionComponent } from "./componentes/crear-observacion/crear-observacion.component";
 import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte.component";
+import { DetalleObservacionComponent } from "./componentes/detalle-observacion/detalle-observacion.component";
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte
     DetalleReporteComponent,
     AgregarImagenObservacionComponent,
     CrearObservacionComponent,
-    CrearReporteComponent
+    CrearReporteComponent,
+    DetalleObservacionComponent
   ],
 })
 export class ReportesPageModule {}

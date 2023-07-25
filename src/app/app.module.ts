@@ -7,8 +7,10 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { SignatureComponent } from "./shared/signature/signature/signature.component";
-import { HttpClientModule } from "@angular/common/http";
-import { FormsModule } from "@angular/forms";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { IonicStorageModule } from '@ionic/storage-angular';
+import { InterceptorService } from "./services/interceptor.service";
 
 @NgModule({
   declarations: [AppComponent, SignatureComponent],
@@ -17,9 +19,18 @@ import { FormsModule } from "@angular/forms";
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    IonicStorageModule.forRoot()
+
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { 
+    provide: HTTP_INTERCEPTORS, 
+    useClass: InterceptorService,
+    multi:true 
+   },{  provide: RouteReuseStrategy, 
+    useClass: IonicRouteStrategy}],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

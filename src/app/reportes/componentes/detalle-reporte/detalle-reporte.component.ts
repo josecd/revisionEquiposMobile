@@ -5,6 +5,7 @@ import { SignatureComponent } from 'src/app/shared/signature/signature/signature
 import { UsuarioService } from 'src/app/usuarios/usuario.service';
 import { AgregarImagenObservacionComponent } from '../agregar-imagen-observacion/agregar-imagen-observacion.component';
 import { CrearObservacionComponent } from '../crear-observacion/crear-observacion.component';
+import { DetalleObservacionComponent } from '../detalle-observacion/detalle-observacion.component';
 
 @Component({
   selector: 'app-detalle-reporte',
@@ -54,7 +55,7 @@ export class DetalleReporteComponent  implements OnInit {
 
   async agregarFoto(dataInfo:any){
     const modal = await this.modalCtrl.create({
-      component: AgregarImagenObservacionComponent,
+      component: DetalleObservacionComponent,
       componentProps:{idObservacion:dataInfo['idObservacion']}
     })
     modal.present();

@@ -64,6 +64,17 @@
 
 
 
+        <ion-item lines="full">
+          <ion-select
+            aria-label="Criticidad"
+            placeholder="Selecciona criticidad"
+            (ionChange)="handleChange($event)"
+          >
+            <ion-select-option *ngFor="let hotel of criticidad" [value]="hotel.id">{{ hotel.nombre }}</ion-select-option>
+          </ion-select>
+      </ion-item>
+
+
 
         <ion-row>
           <ion-col>

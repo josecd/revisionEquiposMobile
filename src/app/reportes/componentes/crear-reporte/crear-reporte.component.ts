@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { ReportesService } from '../../services/reportes.service';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-crear-reporte',
@@ -22,13 +23,14 @@ export class CrearReporteComponent  implements OnInit {
     public formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
     private _reporte:ReportesService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private storage: Storage
   ) { 
     
-
+    
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this._reporte.getHoteles().subscribe({
       next: (data) => {
         this.hoteles = data
@@ -36,13 +38,17 @@ export class CrearReporteComponent  implements OnInit {
       },
       error(err) {},
     });
-
-
     this.ionicForm = this.formBuilder.group({
       recomendaciones: ['',],
       hotelId: [''],
-      userlId:['1'],
+      userId:[''],
     });
+
+     const iduser=  await this.storage.get('user').then(res=>{
+      this.ionicForm.get('userId')?.setValue(res['idUsuario'])
+     })
+
+
 
   }
 

@@ -2,6 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { ReportesService } from '../../services/reportes.service';
+
+import { Storage } from '@ionic/storage';
+
 @Component({
   selector: 'app-crear-observacion',
   templateUrl: './crear-observacion.component.html',
@@ -11,6 +14,21 @@ export class CrearObservacionComponent  implements OnInit {
   @Input("idReporte") idReporte:any;
   // form : crearObservacionDto;
 
+  criticidad  =[
+    {
+      "id":'Bajo',
+      "nombre":'Bajo'
+    },
+    {
+      "id":'Medio',
+      "nombre":'Medio'
+    },
+    {
+      "id":'Alto',
+      "nombre":'Alto'
+    }
+  ]
+  criticidadSelect:any;
 
   ionicForm: FormGroup;
 
@@ -19,13 +37,14 @@ export class CrearObservacionComponent  implements OnInit {
     public formBuilder: FormBuilder,
     private loadingCtrl: LoadingController,
     private _reporte:ReportesService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private storage: Storage
   ) { 
     
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.ionicForm = this.formBuilder.group({
       equipo: ['',],
       marca: [''],
@@ -34,7 +53,13 @@ export class CrearObservacionComponent  implements OnInit {
       area: ['',],
       observacion: ['',],
       reporteId:[this.idReporte],
+      userId:[''],
+      criticidad:['']
     });
+
+    const iduser =  await this.storage.get('user').then(res=>{
+      this.ionicForm.get('userId')?.setValue(res['idUsuario'])
+     })
   }
 
   // submitForm = () => {
@@ -79,5 +104,10 @@ export class CrearObservacionComponent  implements OnInit {
   return() {
     // this.modalCtrl.dismiss(this.imgFile, "return");
     this.modalCtrl.dismiss();
+  }
+
+  handleChange(ev:any) {
+    this.ionicForm.value['criticidad'] = ev.target.value;
+    this.criticidadSelect = ev.target.value;
   }
 }
