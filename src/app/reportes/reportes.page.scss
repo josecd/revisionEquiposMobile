@@ -26,3 +26,28 @@ ion-menu-button {
   #container a {
     text-decoration: none;
   }
+
+
+  ion-fab-button{
+    overflow: visible;
+    position: relative;
+  
+    ion-label {
+      display: inline-block;
+      position: absolute;
+  
+      top: -8px;
+      left: 60px;
+  
+      color: white;
+      background-color: rgba(0,0,0,0.7);
+      line-height: 24px;
+      padding: 4px 8px;
+      border-radius: 4px;
+  
+  
+      pointer-events: auto;
+    }
+  
+    contain: layout;
+  }

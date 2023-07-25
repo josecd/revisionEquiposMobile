@@ -39,7 +39,7 @@ export class CrearReporteComponent  implements OnInit {
       error(err) {},
     });
     this.ionicForm = this.formBuilder.group({
-      recomendaciones: ['',],
+      descripcion: ['',],
       hotelId: [''],
       userId:[''],
     });

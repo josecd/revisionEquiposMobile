@@ -12,9 +12,14 @@
 
       <form [formGroup]="ionicForm" >
 
-        <ion-item lines="full">
+        <ion-item lines="full" *ngIf="false" >
           <ion-label position="floating">recomendacion</ion-label>
           <ion-input formControlName="recomendaciones" type="text" aria-label="equipo"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-input formControlName="descripcion" type="text" aria-label="equipo"></ion-input>
         </ion-item>
 
         <ion-item lines="full">

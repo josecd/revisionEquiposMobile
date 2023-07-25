@@ -96,16 +96,18 @@ export class DetalleObservacionComponent implements OnInit {
   }
 
   async onWillDismiss(event: Event) {
-    const loading = await this.loadingCtrl.create({
-      message: 'Subiendo información...',
-    });
-    loading.present();
-
 
 
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
 
     if (ev.detail.role === 'confirm') {
+      const loading = await this.loadingCtrl.create({
+        message: 'Subiendo información...',
+      });
+      loading.present();
+  
+
+      
       const data = {
         "comentario": ev.detail.data,
         "userId": this.userId,
