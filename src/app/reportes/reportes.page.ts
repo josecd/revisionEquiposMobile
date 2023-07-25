@@ -16,7 +16,7 @@ import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte
 export class ReportesPage implements OnInit {
   public currentOrientation = "";
 
-  reportesList:any;
+  reportesList:any =[];
   constructor(
     private readonly platform: Platform,
     private readonly ngZone: NgZone,

@@ -19,48 +19,6 @@
       <ion-card-title>Lista</ion-card-title>
     </ion-card-header>
 
-    <!-- pikachu inicio -->
-    <ion-list *ngIf="false">
-      <ion-item detail>
-        <!--detailattributegivethearrowtoitem-->
-        <ion-avatar slot="start">
-          <!--slot="start"attributepositionstheavatartostart-->
-          <img
-            src="https://www.pngarts.com/files/3/Pokemon-Pikachu-Transparent-Background-PNG.png"
-          />
-        </ion-avatar>
-        <ion-label>
-          <h2>Pikachu - Pokemon Star</h2>
-          <p>Know more about it !!</p>
-        </ion-label>
-      </ion-item>
-      <ion-item detail>
-        <ion-avatar slot="end">
-          <!--slot="start"attributepositionstheavatartostart-->
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT_rGeHJhrVrPWcvTh2R-_PHFJFNx6PZOy0SQ&usqp=CAU"
-          />
-        </ion-avatar>
-        <ion-label>
-          <h2>Charmander - Pokemon</h2>
-          <p>Know more about it!!</p>
-        </ion-label>
-      </ion-item>
-      <ion-item detail>
-        <ion-avatar slot="start">
-          <img
-            src="https://www.pngitem.com/pimgs/m/130-1306788_bulbasaur-pokemon-png-transparent-png.png"
-          />
-        </ion-avatar>
-        <ion-label>
-          <h2>Bulbasaur - Pokemon</h2>
-          <p>Know more about it !!</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
-    <!-- pikachu final -->
-
-
     <!-- list inicio -->
     <ion-list *ngFor="let data of reportesList">
 
@@ -85,6 +43,21 @@
 
 
   </ion-card>
+
+  <ion-content [fullscreen]="true" *ngIf="reportesList.length == 0">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>No hay información</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content>
+          <!-- {{reporte['hoteles']['fechaRegistro'] | date}} -->
+      </ion-card-content>
+    </ion-card>
+  
+  </ion-content>
+
+  
 </ion-content>
 
     <!-- Botones para podeer agregar firmas y observaciones -->
