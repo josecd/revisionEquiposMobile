@@ -1,3 +1,4 @@
+import { DirectivesModule } from './../directives/directives.module';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -21,7 +22,8 @@ import { DetalleObservacionComponent } from "./componentes/detalle-observacion/d
     IonicModule,
     ReportesPageRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DirectivesModule
   ],
   declarations: [
     ReportesPage,

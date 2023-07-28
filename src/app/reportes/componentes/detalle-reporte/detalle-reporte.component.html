@@ -7,84 +7,84 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="reporte" >
+<ion-content [fullscreen]="true" *ngIf="reporte">
 
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
 
-  <section *ngIf="reporte" >
+  <section *ngIf="reporte">
 
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{reporte['hoteles'][0]['nombre']}}</ion-card-title>
         <!-- <ion-card-subtitle>{{data.fechaRegistro | date}} -  </ion-card-subtitle> -->
       </ion-card-header>
-    
+
       <ion-card-content>
         {{reporte['hoteles'][0]['fechaRegistro'] | date}}
       </ion-card-content>
     </ion-card>
-  
-    
-  
+
+
+
     <!-- //Seleccion multiple de observaciones y firmas -->
-    <ion-accordion-group  [animated]="false" expand="inset" >
-  
+    <ion-accordion-group [animated]="false" expand="inset">
+
       <!-- //Primera seccion observacion -->
       <ion-accordion value="first">
         <ion-item slot="header" color="light">
           <ion-label>Observaciones</ion-label>
         </ion-item>
-  
+
         <div class="ion-padding" slot="content" *ngIf="reporte['observaciones'].length > 0">
-  
-          <ion-card *ngFor="let data of reporte['observaciones']" >
-            
+
+          <ion-card *ngFor="let data of reporte['observaciones']">
+
             <ion-card-header>
               <ion-card-title (click)="agregarFoto(data)">Observacion del reporte </ion-card-title>
-              <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>   
-              
+              <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>
+
             </ion-card-header>
-  
-            
+
+
             <section>
               <ion-item *ngIf="data.equipo">
-                <ion-label >
+                <ion-label>
                   <h3>Equipo</h3>
                   <p>{{data.equipo}}</p>
                 </ion-label>
               </ion-item>
-        
+
               <ion-item *ngIf="data.marca">
                 <ion-label>
                   <h3>Marca</h3>
                   <p>{{data.marca}}</p>
                 </ion-label>
               </ion-item>
-              
+
               <ion-item *ngIf="data.modelo">
                 <ion-label>
                   <h3>Modelo</h3>
                   <p>{{data.modelo}}</p>
                 </ion-label>
               </ion-item>
-  
+
               <ion-item *ngIf="data.numeroSerie">
                 <ion-label>
                   <h3>N° de Serie</h3>
                   <p>{{data.numeroSerie}}</p>
                 </ion-label>
               </ion-item>
-              
+
               <ion-item *ngIf="data.area">
                 <ion-label>
                   <h3>Área</h3>
                   <p>{{data.area}}</p>
                 </ion-label>
               </ion-item>
-  
+
               <ion-item *ngIf="data.criticidad">
                 <ion-label>
                   <h3>Criticidad</h3>
@@ -92,50 +92,49 @@
                 </ion-label>
               </ion-item>
 
-              
+
             </section>
-   
-  
+
+
             <ion-card-content>
               {{data.observacion}}
             </ion-card-content>
-  
-  
-            <!-- <ion-card  *ngFor="let item of data['imagenes']">
+
+            <!-- ///iamges slide -->
+
+            <swiper-container style="--swiper-pagination-color: #fff" class="mySwiper"
+              zoom="true" navigation="true" pagination="true" pagination-clickable="true">
+              <swiper-slide *ngFor="let item of data['imagenes']">
+                <div class="swiper-zoom-container">
+                  <ion-card>
+                    <ion-item>
+                      <ion-label>{{item.fechaRegistro | date}}</ion-label>
+                      <ion-button fill="outline" slot="end" (click)="deleteImg(item)">x</ion-button>
+                    </ion-item>
               
-              <img alt="Silhouette of mountains" [src]="item['url']" />
-              <ion-card-header>
-                <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>
-                <ion-buttons slot="end">
-                  <ion-button  [strong]="true">Confirm</ion-button>
-                </ion-buttons>
-              </ion-card-header>
-            </ion-card>
-             -->
+                    <ion-card-content>
+                      <img [src]="item['url']" />
 
-            <ion-card *ngFor="let item of data['imagenes']">
-              <!-- <ion-card-header>
-                  <span style="color:blue">{{reporte.fechaRegistro | date}}</span>
-                  <ion-icon style="float: right;" (click)="takeAction(account.$key)" name="more">
-                </ion-icon>
-              </ion-card-header> -->
+                    </ion-card-content>
+                  </ion-card>
+                </div>
+              </swiper-slide>
+            </swiper-container>
 
-              <ion-card-content >
-                <img style="
-                width: auto;
-                margin: auto;
-                display: block;" 
-                (click)="deleteImg(item)"
-                [src]="item['url']" />
-              </ion-card-content>
+            
 
-              <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>
-            </ion-card>
+
+            <!-- </ion-card> -->
+
+            <div *ngIf="zoomActive" class="backdrop" [style.opacity]="zoomScale"></div>
+
+
+
 
 
           </ion-card>
         </div>
-  
+
         <div class="ion-padding" slot="content" *ngIf="reporte['observaciones'].length == 0">
           <ion-grid>
             <ion-row>
@@ -147,15 +146,15 @@
             </ion-row>
           </ion-grid>
         </div>
-  
+
       </ion-accordion>
-  
+
       <!-- //Segunda seccion Firmas -->
       <ion-accordion value="second">
         <ion-item slot="header" color="light">
           <ion-label>Firmas</ion-label>
         </ion-item>
-  
+
         <div class="ion-padding" slot="content" *ngIf="reporte['firmas'].length > 0">
           <ion-card *ngFor="let data of reporte['firmas']">
             <img alt="Silhouette of mountains" [src]="data['url']" (click)="deleteFirma(data)" />
@@ -164,12 +163,12 @@
               <ion-card-subtitle>{{data.fechaRegistro | date}} </ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-             {{data.nombreFirma}}
+              {{data.nombreFirma}}
             </ion-card-content>
-  
+
           </ion-card>
         </div>
-  
+
         <div class="ion-padding" slot="content" *ngIf="reporte['firmas'].length == 0">
           <ion-grid>
             <ion-row>
@@ -181,65 +180,75 @@
             </ion-row>
           </ion-grid>
         </div>
-  
+
       </ion-accordion>
-  
-  
+
+
     </ion-accordion-group>
-  
-  
-  
-  
+
+
+
+
     <!-- Recomendaciones -->
     <ion-card>
       <ion-card-header>
         <ion-card-title>Recomendaciones</ion-card-title>
         <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>
       </ion-card-header>
-    
+
       <ion-card-content>
         {{reporte.recomendaciones || 'No tiene recomendaciones'}}
       </ion-card-content>
     </ion-card>
-  
-  
 
 
-    
+
+
+
   </section>
 
-  
+
+
+
+
+
 </ion-content>
 
-    <!-- Botones para podeer agregar firmas y observaciones -->
-    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-      <ion-fab-button>
-        <ion-icon name="chevron-up-circle"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-list side="top">
-        <!-- Firma -->
-        <ion-fab-button (click)="openModalFirma()">
-          <ion-icon name="pencil-outline"></ion-icon>
-        </ion-fab-button>
-        <!-- Observacion -->
-        <ion-fab-button (click)="openModalObservacion()" >
-          <ion-icon name="receipt-outline"></ion-icon>
-        </ion-fab-button>
-  
-      </ion-fab-list>
-    </ion-fab>
-  
+<!-- Botones para podeer agregar firmas y observaciones -->
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="chevron-up-circle"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <!-- Firma -->
+    <ion-fab-button (click)="openModalFirma()">
+      <ion-icon name="pencil-outline"></ion-icon>
+    </ion-fab-button>
+    <!-- Observacion -->
+    <ion-fab-button (click)="openModalObservacion()">
+      <ion-icon name="receipt-outline"></ion-icon>
+    </ion-fab-button>
+    <!-- ver Reporte -->
+    <ion-fab-button (click)="exportPDf()">
+      <ion-icon name="eye-outline"></ion-icon>
+    </ion-fab-button>
 
-    
+  </ion-fab-list>
+</ion-fab>
+
+
+
 <ion-content [fullscreen]="true" *ngIf="!reporte">
   <ion-card>
     <ion-card-header>
       <ion-card-title>No hay información</ion-card-title>
     </ion-card-header>
-  
+
     <ion-card-content>
-        <!-- {{reporte['hoteles']['fechaRegistro'] | date}} -->
+      <!-- {{reporte['hoteles']['fechaRegistro'] | date}} -->
     </ion-card-content>
   </ion-card>
+
+
 
 </ion-content>

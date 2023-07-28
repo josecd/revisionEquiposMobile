@@ -77,4 +77,8 @@ export class ReportesService {
       data
     );
   }
+
+  exportPDF(id:any){
+    return this._httpClient.get(environment.API_URL+'/reportes/'+id+'/pdf2');
+  }
 }

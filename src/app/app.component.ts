@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { LoginService } from './pages/login.service';
 import { Router } from '@angular/router';
-
+import { Optional } from '@angular/core';
+import { IonRouterOutlet, Platform } from '@ionic/angular';
+import { App } from '@capacitor/app';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -19,18 +21,17 @@ export class AppComponent {
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
   constructor(
     private storage: Storage,
-    private _login :LoginService,
-    private router: Router
+    private _login: LoginService,
+    private router: Router,
+    private platform: Platform,
+    @Optional() private routerOutlet?: IonRouterOutlet
   ) {
     this.init();
-    this._login.getAuth().subscribe({
-      next:(data:any)=>{
-        this.router.navigate(['/reportes'])
-      },
-      error:(err:any)=>{
-        this.router.navigate(['/login'])
+    this.platform.backButton.subscribeWithPriority(3, () => {
+      if (!this.routerOutlet?.canGoBack()) {
+        App.exitApp();
       }
-    })
+    });
   }
 
   async init() {

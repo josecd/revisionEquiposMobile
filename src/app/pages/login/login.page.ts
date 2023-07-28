@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AlertController, IonInput, LoadingController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,8 @@ export class LoginPage implements OnInit {
     public modalCtrl: ModalController,
     private alertController: AlertController,
     private router: Router,
-    private storage: Storage
+    private storage: Storage,
+    private _auth:AuthenticationService
   ) {
     this.ionicForm = this.formBuilder.group({
       correo: ['',],
@@ -40,15 +42,15 @@ export class LoginPage implements OnInit {
 
 
   load() {
-    this._login.getAuth().subscribe({
-      next:(data:any)=>{
-        console.log(data);
-        this.router.navigate(['/reportes'])
-      },
-      error:(err:any)=>{
-        console.error(err);
-      }
-    })
+    // this._login.getAuth().subscribe({
+    //   next:(data:any)=>{
+    //     console.log(data);
+    //     this.router.navigate(['/reportes'])
+    //   },
+    //   error:(err:any)=>{
+    //     console.error(err);
+    //   }
+    // })
   }
 
   async login() {
@@ -60,14 +62,18 @@ export class LoginPage implements OnInit {
     if (this.correo && this.clave) {
       return;
     }
-    this._login.login(this.ionicForm.value).subscribe({
+    this._auth.login(this.ionicForm.value).subscribe({
       next: async (data:any) => {
         loading.dismiss();          
+        console.log(data);
+        
         await this.storage.set('key', data['access_token']);
         await this.storage.set('user', data['user']);
         this.router.navigate(['/reportes'])
       },
       error: async (err) => {
+        console.log(err);
+        
         loading.dismiss();
 
         const alert = await this.alertController.create({
@@ -79,7 +85,33 @@ export class LoginPage implements OnInit {
         await alert.present();
       },
     });
-  }
+  } 
+
+  async login2() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Cargando información...',
+    });
+    loading.present();
+		await loading.present();
+
+		this._auth.login(this.ionicForm.value).subscribe(
+			async (res) => {
+				await loading.dismiss();
+				this.router.navigateByUrl('/reportes', { replaceUrl: true });
+			},
+			async (res) => {
+				await loading.dismiss();
+				const alert = await this.alertController.create({
+					header: 'Intente más tarde',
+					message: 'Ha ocurrido un error',
+					buttons: ['OK']
+				});
+
+				await alert.present();
+			}
+		);
+	}
+
 
   togglePwd() {
     this.showPwd = !this.showPwd;

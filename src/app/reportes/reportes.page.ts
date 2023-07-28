@@ -7,6 +7,7 @@ import { BehaviorSubject } from "rxjs";
 import { SignatureComponent } from "../shared/signature/signature/signature.component";
 import { DetalleReporteComponent } from "./componentes/detalle-reporte/detalle-reporte.component";
 import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte.component";
+import { Browser } from '@capacitor/browser';
 
 @Component({
   selector: "app-reportes",
@@ -16,24 +17,24 @@ import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte
 export class ReportesPage implements OnInit {
   public currentOrientation = "";
 
-  reportesList:any =[];
+  reportesList: any = [];
   constructor(
     private readonly platform: Platform,
     private readonly ngZone: NgZone,
     private _reporte: ReportesService,
-    public modalCtrl:ModalController
+    public modalCtrl: ModalController
   ) {
 
   }
 
-  handleRefresh(event:any) {
+  handleRefresh(event: any) {
     this._reporte.getReportes().subscribe({
       next: (data) => {
         this.reportesList = data
         console.log(data);
-      event.target.complete();
+        event.target.complete();
       },
-      error(err) {},
+      error(err) { },
     });
   }
 
@@ -47,19 +48,19 @@ export class ReportesPage implements OnInit {
   //GetReportes
   reportes() {
     console.log('Estoy entrando');
-    
+
     this._reporte.getReportes().subscribe({
       next: (data) => {
         this.reportesList = data
         console.log(data);
       },
-      error(err) {},
+      error(err) { },
     });
   }
 
-  async openReporte(data:any){
+  async openReporte(data: any) {
     console.log('Reporte', data);
-    
+
     const modal = await this.modalCtrl.create({
       component: DetalleReporteComponent,
       componentProps: {
@@ -70,7 +71,7 @@ export class ReportesPage implements OnInit {
 
   }
   async openModalReportes() {
-    
+
     const modal = await this.modalCtrl.create({
       component: CrearReporteComponent,
     });
@@ -79,10 +80,20 @@ export class ReportesPage implements OnInit {
     if (data) {
       this.reportes()
 
-    }else{
+    } else {
       console.log(data);
     }
 
   }
-  
+
+
+  async exportPDf() {
+
+    await Browser.open({ url: 'https://revisionequiposapi-production.up.railway.app/reportes/pdf/view' });
+  }
+
+
+  onPress(event:any) {
+    console.log('press: ', event);
+  }
 }

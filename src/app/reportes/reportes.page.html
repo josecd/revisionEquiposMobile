@@ -8,11 +8,11 @@
 </ion-header>
 
 <ion-content>
-  
+
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
+
 
   <ion-card>
     <ion-card-header>
@@ -27,8 +27,8 @@
           <ion-label>
             <h2>{{data.descripcion || 'No hay una descripción' }}</h2>
             <p>{{data.hoteles.nombre}}</p>
-            <p>  {{data['fechaRegistro'] | date}}</p>
-            
+            <p> {{data['fechaRegistro'] | date}}</p>
+
           </ion-label>
 
           <!-- <ion-label>{{data.recomendaciones || 'No hay una descripción'}}</ion-label> -->
@@ -49,26 +49,29 @@
       <ion-card-header>
         <ion-card-title>No hay información</ion-card-title>
       </ion-card-header>
-    
+
       <ion-card-content>
-          <!-- {{reporte['hoteles']['fechaRegistro'] | date}} -->
+        <!-- {{reporte['hoteles']['fechaRegistro'] | date}} -->
       </ion-card-content>
     </ion-card>
-  
+
   </ion-content>
 
-  
+
 </ion-content>
 
-    <!-- Botones para podeer agregar firmas y observaciones -->
-    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-      <ion-fab-button>
-        <ion-icon name="chevron-up-circle"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-list side="top">
-        <ion-fab-button (click)="openModalReportes()">
-          <ion-icon name="pencil-outline"></ion-icon>
-        </ion-fab-button>
+<!-- Botones para podeer agregar firmas y observaciones -->
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="chevron-up-circle"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button (click)="openModalReportes()">
+      <ion-icon name="pencil-outline"></ion-icon>
+    </ion-fab-button>
+    <!-- <ion-fab-button (click)="exportPDf()">
+          <ion-icon name="download-outline"></ion-icon>
+        </ion-fab-button> -->
 
-      </ion-fab-list>
-    </ion-fab>
+  </ion-fab-list>
+</ion-fab>

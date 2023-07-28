@@ -1,9 +1,10 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ReportesService } from '../../services/reportes.service';
 import { AlertController, IonModal, LoadingController, ModalController } from '@ionic/angular';
 import { AgregarImagenObservacionComponent } from '../agregar-imagen-observacion/agregar-imagen-observacion.component';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { Storage } from '@ionic/storage';
+import Swiper from 'swiper';
 
 @Component({
   selector: 'app-detalle-observacion',
@@ -17,6 +18,12 @@ export class DetalleObservacionComponent implements OnInit {
   informacionObs: any;
   comentario: any;
   userId: any;
+
+  ///iamgenes
+  @ViewChild('swipper')
+  swiperRef:ElementRef | undefined;
+  swiper?:Swiper
+
   constructor(
     private _reporte: ReportesService,
     public modalCtrl: ModalController,
@@ -178,5 +185,10 @@ export class DetalleObservacionComponent implements OnInit {
       });
     
       await alert.present();
+    }
+
+    swiperReady(){
+      console.log('if');
+      this.swiper = this.swiperRef?.nativeElement.Swiper;
     }
 }

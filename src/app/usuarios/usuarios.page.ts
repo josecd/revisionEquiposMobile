@@ -5,6 +5,7 @@ import { UsuarioService } from './usuario.service';
 import { ScreenOrientation, OrientationType } from '@capawesome/capacitor-screen-orientation';
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -18,7 +19,8 @@ export class UsuariosPage implements OnInit {
     public modalCtrl:ModalController,
     private _usuario:UsuarioService,
     private storage: Storage,
-    private router: Router
+    private router: Router,
+    private _auth:AuthenticationService
 
   ) { }
 
@@ -81,9 +83,10 @@ export class UsuariosPage implements OnInit {
   }
 
   async logout(){
-    await this.storage.clear().then(res=>{
-      this.router.navigate(['/login'])
-    })
-
+    // await this.storage.clear().then(res=>{
+    //   this.router.navigate(['/login'])
+    // })
+		await this._auth.logout();
+		this.router.navigateByUrl('/', { replaceUrl: true });
   }
 }

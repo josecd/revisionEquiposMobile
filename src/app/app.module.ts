@@ -11,6 +11,8 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { InterceptorService } from "./services/interceptor.service";
+import { register } from 'swiper/element/bundle';
+register();
 
 @NgModule({
   declarations: [AppComponent, SignatureComponent],
