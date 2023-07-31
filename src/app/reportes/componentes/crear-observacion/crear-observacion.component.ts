@@ -20,10 +20,6 @@ export class CrearObservacionComponent  implements OnInit {
       "nombre":'Bajo'
     },
     {
-      "id":'Medio',
-      "nombre":'Medio'
-    },
-    {
       "id":'Alto',
       "nombre":'Alto'
     }
@@ -75,7 +71,7 @@ export class CrearObservacionComponent  implements OnInit {
   
   async submitForm(){
     const loading = await this.loadingCtrl.create({
-      message: 'Subiendo imagenes...',
+      message: 'Subiendo información...',
     });
     loading.present();
 

@@ -12,15 +12,21 @@ import {
   ScreenOrientation,
   OrientationType,
 } from "@capawesome/capacitor-screen-orientation";
+import { UsuarioService } from "src/app/usuarios/usuario.service";
+import { AuthenticationService } from "src/app/services/authentication.service";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: "app-signature",
   templateUrl: "./signature.component.html",
   styleUrls: ["./signature.component.scss"],
 })
-export class SignatureComponent implements OnInit, AfterViewInit {
+export class SignatureComponent implements AfterViewInit {
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
   @ViewChild(IonModal) modal?: IonModal;
-  @ViewChild("canvas", { static: true }) signaturePadElement?: ElementRef;
+  @ViewChild("canvas1", { static: true }) signaturePadElement?: ElementRef;
+
+  @ViewChild('imageid') myDiv: ElementRef;
   signaturePad: any;
   imgFile: any;
   @Input() data: [];
@@ -40,28 +46,35 @@ export class SignatureComponent implements OnInit, AfterViewInit {
     },
   ];
   selectTipo: any;
-  nombre:any;
+  nombre: any;
+
+  tipoFirma: boolean = true;
+
+  usuario: any;
   constructor(
     private elemeneRef: ElementRef,
     public modalCtrl: ModalController,
-    private alertController: AlertController
-  ) {}
+    private alertController: AlertController,
+    private _usuario: UsuarioService,
+    private _auth: AuthenticationService
+  ) { }
+  ngAfterViewInit(): void {
+  }
 
   ngOnInit() {
-    console.log(this.info);
-    console.log(this.data);
+    this.init()
+    this._auth.user$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((user) => {
+        console.log(user);
+        this.usuario = user;
+        console.log(this.usuario.perfil.url);
+      });
+
+      
   }
 
   init() {
-    const canvas: any = this.elemeneRef.nativeElement.querySelector("canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight - 140;
-    if (this.signaturePad) {
-      this.signaturePad.clear();
-    }
-  }
-
-  public ngAfterViewInit() {
     this.signaturePad = new SignaturePad(
       this.signaturePadElement?.nativeElement,
       {
@@ -72,8 +85,19 @@ export class SignatureComponent implements OnInit, AfterViewInit {
     this.signaturePad.clear();
   }
 
+  // public ngAfterViewInit() {
+  //   this.signaturePad = new SignaturePad(
+  //     this.signaturePadElement?.nativeElement,
+  //     {
+  //       penColor: "rgb(0,0,0)",
+  //       backgroundColor: "rgb(255,255,255)",
+  //     }
+  //   );
+  //   this.signaturePad.clear();
+  // }
+
   isCanvasBlack() {
-    if (this.selectTipo ) {
+    if (this.selectTipo) {
       return true;
     } else {
       return true;
@@ -81,12 +105,9 @@ export class SignatureComponent implements OnInit, AfterViewInit {
   }
 
   async saveSignature() {
-    // true es null firma
-    // false tiene algo
-    if (this.selectTipo) {
-      
-    }
-    if (this.signaturePad._isEmpty ) {
+
+    if (this.tipoFirma) {
+      if (this.signaturePad._isEmpty) {
 
         const alert = await this.alertController.create({
           header: 'Alerta',
@@ -95,22 +116,33 @@ export class SignatureComponent implements OnInit, AfterViewInit {
           buttons: ['OK'],
         });
         await alert.present();
-    }else{
-      const dataUrl = this.signaturePad.toDataURL("image/png");
-      const blob = this.convertBase64toBlob(dataUrl);
-      console.log(blob);
-      var profile = new Image();
-      profile.src = dataUrl;
+      } else {
+        const dataUrl = this.signaturePad.toDataURL("image/png");
+        const blob = this.convertBase64toBlob(dataUrl);
+        var profile = new Image();
+        profile.src = dataUrl;
   
-      // this.modalCtrl.dismiss(this.dataURItoBlob(dataUrl), "img");
+        // this.modalCtrl.dismiss(this.dataURItoBlob(dataUrl), "img");
+        this.modalCtrl.dismiss({
+          img: this.dataURItoBlob(dataUrl),
+          type: this.selectTipo,
+          nombreFirma: this.nombre
+        });
+        ScreenOrientation.unlock();
+  
+      }
+    }else{
+      const dataUrl = this.getBase64Image(document.getElementById("imageid"))
+      console.log(dataUrl);
       this.modalCtrl.dismiss({
         img: this.dataURItoBlob(dataUrl),
         type: this.selectTipo,
         nombreFirma: this.nombre
       });
       ScreenOrientation.unlock();
-
     }
+
+
 
   }
 
@@ -173,5 +205,34 @@ export class SignatureComponent implements OnInit, AfterViewInit {
   handleChange(e: any) {
     this.selectTipo = null;
     this.selectTipo = e.detail.value;
+  }
+
+  getFirma() {
+    // this._usuario.getFirmas(this.usuario.idUsuario).subscribe({
+    //   next:(value:any) =>{
+    //     console.log(value);
+
+    //     this.firma = value
+    //   },
+    //   error:(err:any)=>{
+    //     console.log(err);
+    //   }
+    // })
+  }
+
+  cambioDeFirma() {
+    this.tipoFirma = this.tipoFirma == true ? false : true;
+    this.nombre = this.tipoFirma===false?this.usuario.nombre:''
+
+  }
+
+  getBase64Image(img:any) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx:any = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL
   }
 }

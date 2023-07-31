@@ -26,6 +26,7 @@
             <ion-select
               aria-label="Hoteles"
               placeholder="Selecciona hotel"
+              formControlName="hotelId" 
               (ionChange)="handleChange($event)"
             >
               <ion-select-option *ngFor="let hotel of hoteles" [value]="hotel.idHotel">{{ hotel.nombre }}</ion-select-option>
@@ -34,7 +35,7 @@
 
         <ion-row>
           <ion-col>
-            <ion-button type="submit" color="danger" expand="block" (click)="submitForm()">Guardar</ion-button>
+            <ion-button  [disabled]="!ionicForm.valid" type="submit" color="danger" expand="block" (click)="submitForm()">Guardar</ion-button>
           </ion-col>
         </ion-row>
       </form>

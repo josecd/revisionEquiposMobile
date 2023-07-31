@@ -69,7 +69,6 @@ export class AgregarImagenObservacionComponent  implements OnInit {
 
     let formData = new FormData();
     formData.append('observacionId',this.idObservacion);
-    console.log('IDuser',this.userId);
     
     formData.append('userId',this.userId);
 
@@ -104,18 +103,15 @@ export class AgregarImagenObservacionComponent  implements OnInit {
     const reader:any = new FileReader();
 
     if (!file.type.match(pattern)) {
-      console.log('File format not supported');
       return;
     }
 
     reader.onload = () => {
-      console.log(reader.result.toString());
       this.photo = reader.result.toString()
       this.photos.push(reader.result.toString())
       this.files.push( this.dataURItoBlob(reader.result.toString()))
     };
     reader.readAsDataURL(file);
-    console.log(file);
     
   }
 

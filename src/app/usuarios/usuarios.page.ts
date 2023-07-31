@@ -6,6 +6,8 @@ import { ScreenOrientation, OrientationType } from '@capawesome/capacitor-screen
 import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
+import { SignatureUsuarioComponent } from '../shared/signature-usuario/signature-usuario.component';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-usuarios',
@@ -14,37 +16,60 @@ import { AuthenticationService } from '../services/authentication.service';
 })
 export class UsuariosPage implements OnInit {
 
-  usuario:any;
+  usuario: any;
+  usuario2: any;
+
+  firma: any = [];
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+
   constructor(
-    public modalCtrl:ModalController,
-    private _usuario:UsuarioService,
+    public modalCtrl: ModalController,
+    private _usuario: UsuarioService,
     private storage: Storage,
     private router: Router,
-    private _auth:AuthenticationService
+    private _auth: AuthenticationService
 
-  ) { }
-
-  async ngOnInit() {
-
-    this.usuario = await this.storage.get('user');
-
-    console.log(this.usuario);
-    
-    
+  ) {
+    // this._auth.user$
+    //   .pipe(takeUntil(this._unsubscribeAll))
+    //   .subscribe((user) => {
+    //     console.log(user);
+    //     this.usuario2 = user;
+    //   });
   }
 
- async  onClick(){
+  async ngOnInit() {
+    this.usuario = await this.storage.get('user');
+    console.log(this.usuario);
+    
+    this.firma = this.usuario['perfil']
+  }
+
+   getFirma() {
+    this.firma = []
+    this._usuario.getFirmas(this.usuario.idUsuario).subscribe({
+      next: async (value: any) => {
+        console.log(value);
+        await this.storage.set('user', value);
+        this._auth.user = value;
+        this.firma = value['perfil']
+      },
+      error: (err: any) => {
+        console.log(err);
+      }
+    })
+  }
+  async onClick() {
     const modal = await this.modalCtrl.create({
-      component:SignatureComponent,
+      component: SignatureComponent,
       // componentProps:{Signature:this.}
     });
-     modal.present()
+    modal.present()
 
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'img') {
-      console.log(data);
-      
+
     }
   }
 
@@ -54,7 +79,7 @@ export class UsuariosPage implements OnInit {
 
 
   async openModal() {
-    ScreenOrientation.lock({ type: OrientationType.LANDSCAPE });
+    // ScreenOrientation.lock({ type: OrientationType.LANDSCAPE });
 
 
     const modal = await this.modalCtrl.create({
@@ -65,28 +90,49 @@ export class UsuariosPage implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-      console.log(data);
     }
 
     if (role === 'img') {
-      console.log(data);
       let formData = new FormData();
-      formData.append('reporteId','1');
-      formData.append('file',data);
-      formData.append('tipo','FirmaGerente');
+      formData.append('reporteId', '1');
+      formData.append('file', data);
+      formData.append('tipo', 'FirmaGerente');
 
-      this._usuario.enviarFirma(formData).subscribe(res=>{
-        console.log(res);
-        
+      this._usuario.enviarFirma(formData).subscribe(res => {
+        this.getFirma();
       })
     }
   }
 
-  async logout(){
+  async logout() {
     // await this.storage.clear().then(res=>{
     //   this.router.navigate(['/login'])
     // })
-		await this._auth.logout();
-		this.router.navigateByUrl('/', { replaceUrl: true });
+    await this._auth.logout();
+    this.router.navigateByUrl('/', { replaceUrl: true });
+  }
+
+
+  async agregarFirma() {
+    ScreenOrientation.lock({ type: OrientationType.LANDSCAPE });
+
+    const modal = await this.modalCtrl.create({
+      component: SignatureUsuarioComponent,
+      // componentProps: { idReporte: this.data['idReporte'].toString() }
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if (data) {
+      console.log(data);
+      let formData = new FormData();
+      formData.append('file', data.img)
+      formData.append('nombre', this.usuario['nombre'])
+
+      this._usuario.enviarFirmaPerfil(this.usuario.idUsuario, formData).subscribe(res => {
+        this.getFirma()
+      })
+    } else {
+    }
+
   }
 }

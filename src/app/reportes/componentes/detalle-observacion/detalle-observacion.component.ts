@@ -5,6 +5,7 @@ import { AgregarImagenObservacionComponent } from '../agregar-imagen-observacion
 import { OverlayEventDetail } from '@ionic/core/components';
 import { Storage } from '@ionic/storage';
 import Swiper from 'swiper';
+import { ImageModalPage } from 'src/app/shared/image-modal/image-modal.page';
 
 @Component({
   selector: 'app-detalle-observacion',
@@ -13,6 +14,8 @@ import Swiper from 'swiper';
 })
 export class DetalleObservacionComponent implements OnInit {
   @Input('idObservacion') idObservacion: any;
+  @Input('editable') editable: any= true;
+  
   @ViewChild(IonModal) modal: IonModal;
   idObs: any;
   informacionObs: any;
@@ -24,6 +27,7 @@ export class DetalleObservacionComponent implements OnInit {
   swiperRef:ElementRef | undefined;
   swiper?:Swiper
 
+  //Editable
   constructor(
     private _reporte: ReportesService,
     public modalCtrl: ModalController,
@@ -34,7 +38,6 @@ export class DetalleObservacionComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    console.log(this.idObservacion);
     const iduser = await this.storage.get('user').then(res => {
       this.userId = res['idUsuario']
     })
@@ -49,9 +52,8 @@ export class DetalleObservacionComponent implements OnInit {
       {
         next: (res) => {
           console.log(res);
-          this.informacionObs = res;
-          console.log(this.informacionObs['observacionesImagen']);
           
+          this.informacionObs = res;
         },
         error: (err) => {
 
@@ -71,10 +73,8 @@ export class DetalleObservacionComponent implements OnInit {
     })
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    console.log(data);
 
     if (data) {
-      console.log('si entro');
       this.load()
       // this.handleRefresh(true)
     }
@@ -85,7 +85,6 @@ export class DetalleObservacionComponent implements OnInit {
     this._reporte.getObservacion(this.idObservacion).subscribe(
       {
         next: (res) => {
-          console.log(res);
           this.informacionObs = res;
         },
         error: (err) => {
@@ -122,13 +121,10 @@ export class DetalleObservacionComponent implements OnInit {
         "userId": this.userId,
         "observacionId": this.idObservacion
       }
-      console.log(data);
       this._reporte.crearComentario(data).subscribe({
         next:(value)=> {
           loading.dismiss();
           this.load()
-          console.log(value);
-
         },
          error:async (err)=> {
           loading.dismiss();
@@ -152,7 +148,6 @@ export class DetalleObservacionComponent implements OnInit {
   }
 
   async  deleteImg(item:any){
-    console.log(item);
       const alert = await this.alertController.create({
         header: "Alerta",
         message: "¿Desea eliminar imagen?",
@@ -190,5 +185,16 @@ export class DetalleObservacionComponent implements OnInit {
     swiperReady(){
       console.log('if');
       this.swiper = this.swiperRef?.nativeElement.Swiper;
+    }
+
+    async openPreview(img: any) {
+      const modal = await this.modalCtrl.create({
+        component: ImageModalPage,
+        cssClass: 'transparent-modal',
+        componentProps: {
+          img
+        }
+      });
+      modal.present();
     }
 }

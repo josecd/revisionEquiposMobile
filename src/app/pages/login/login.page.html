@@ -1,13 +1,11 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
-    <!-- <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons> -->
+
     <ion-title>Iniciar sesión</ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
-<ion-content>
+<ion-content *ngIf="false" >
   <form [formGroup]="ionicForm" >
 
     <ion-grid>
@@ -75,4 +73,63 @@
   </form>
 
   
+</ion-content>
+
+
+<ion-header>
+	<ion-toolbar style="text-align: center;">
+		<ion-title>Iniciar sesión</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	<form (ngSubmit)="login2()" [formGroup]="ionicForm">
+		<div class="input-group">
+      <ion-item >
+        <ion-label position="stacked">
+          <ion-icon name="accessibility-outline"></ion-icon>
+          ID
+        </ion-label>
+        <ion-input
+        type="text" 
+          formControlName="correo"
+        >
+        </ion-input>
+
+      </ion-item>
+
+      <ion-item >
+        <ion-label position="stacked">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          Contraseña
+        </ion-label>
+        <ion-input
+          [type]="showPwd ? 'text' : 'password'"
+          formControlName="clave"
+        >
+        </ion-input>
+        <ion-icon
+          slot="end"
+          [name]="pwdIcon"
+          (click)="togglePwd()"
+        >
+        </ion-icon>
+      </ion-item>
+
+		</div>
+
+		<ion-button type="submit" expand="block" [disabled]="!credentials.valid">Entrar</ion-button>
+		<ion-button type="button" expand="block" color="light" fill="clear"
+			>
+		</ion-button>
+<!-- 
+		<ion-button type="button" expand="block" color="tertiary">
+			<ion-icon name="logo-google" slot="start"></ion-icon>
+			Sign in with Google
+		</ion-button>
+		<ion-button type="button" expand="block" color="tertiary">
+			<ion-icon name="logo-apple" slot="start"></ion-icon>
+			Sign in with Apple
+		</ion-button> -->
+	</form>
 </ion-content>

@@ -6,7 +6,7 @@ import { environment } from "src/environments/environment";
   providedIn: "root",
 })
 export class ReportesService {
-  constructor(private _httpClient: HttpClient) {}
+  constructor(private _httpClient: HttpClient) { }
 
   enviarFirma(firma: any) {
     return this._httpClient.post(
@@ -15,70 +15,82 @@ export class ReportesService {
     );
   }
 
-  getReportes(){
-    return this._httpClient.get(environment.API_URL+'/reportes');
+  getReportes() {
+    return this._httpClient.get(environment.API_URL + '/reportes');
   }
 
-  getReporteID(id:number){
-    return this._httpClient.get(environment.API_URL+`/reportes/${id}`);
+  getReporteID(id: number) {
+    return this._httpClient.get(environment.API_URL + `/reportes/${id}`);
   }
 
-  getFirmas(){
-    return this._httpClient.get(environment.API_URL+``)
+  getFirmas() {
+    return this._httpClient.get(environment.API_URL + ``)
   }
 
-  agregarFotosObservacion(datos:any){
+  agregarFotosObservacion(datos: any) {
     return this._httpClient.post(
       environment.API_URL + "/observaciones/imgObservacion",
       datos
     );
   }
+  eliminarReporte(id: any) {
+    return this._httpClient.delete(
+      environment.API_URL + "/reportes/" + id,
+    );
+  }
 
-  eliminarImgObsevacion(datos:any){
+  eliminarImgObsevacion(datos: any) {
     return this._httpClient.post(
       environment.API_URL + "/observaciones/eliminarImgObservacion",
       datos
     );
   }
 
-  eliminarFirma(datos:any){
+  eliminarFirma(datos: any) {
     return this._httpClient.post(
       environment.API_URL + "/reportes/firmaEliminar",
       datos
     );
   }
 
-  crearObservacionReporte(data:any){
+  crearObservacionReporte(data: any) {
     return this._httpClient.post(
       environment.API_URL + "/observaciones/crear",
       data
     );
   }
 
-  getHoteles(){
-    return this._httpClient.get(environment.API_URL+'/hoteles');
+  getHoteles() {
+    return this._httpClient.get(environment.API_URL + '/hoteles');
   }
 
 
-  crearReporte(data:any){
+  crearReporte(data: any) {
     return this._httpClient.post(
       environment.API_URL + "/reportes",
       data
     );
   }
 
-  getObservacion(id:any){
-    return this._httpClient.get(environment.API_URL+'/observaciones/'+id);
+  getObservacion(id: any) {
+    return this._httpClient.get(environment.API_URL + '/observaciones/' + id);
   }
 
-  crearComentario(data:any){
+  crearComentario(data: any) {
     return this._httpClient.post(
       environment.API_URL + "/observaciones/agregarComentario",
       data
     );
   }
 
-  exportPDF(id:any){
-    return this._httpClient.get(environment.API_URL+'/reportes/'+id+'/pdf2');
+  exportPDF(id: any) {
+    return this._httpClient.get(environment.API_URL + '/reportes/' + id + '/pdf2');
+  }
+
+  editarRecomendacion(id:any,data:any){
+    return this._httpClient.patch(
+      environment.API_URL + `/reportes/${id}`,
+      data
+    );
   }
 }

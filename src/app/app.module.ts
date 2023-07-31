@@ -12,10 +12,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { InterceptorService } from "./services/interceptor.service";
 import { register } from 'swiper/element/bundle';
+import { SignatureUsuarioComponent } from "./shared/signature-usuario/signature-usuario.component";
 register();
 
 @NgModule({
-  declarations: [AppComponent, SignatureComponent],
+  declarations: [AppComponent, SignatureComponent,SignatureUsuarioComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

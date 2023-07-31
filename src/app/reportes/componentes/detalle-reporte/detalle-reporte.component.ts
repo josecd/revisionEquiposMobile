@@ -1,5 +1,6 @@
+import { OverlayEventDetail } from '@ionic/core/components';
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import { AlertController, IonModal, LoadingController, ModalController } from '@ionic/angular';
 import { ReportesService } from '../../services/reportes.service';
 import { SignatureComponent } from 'src/app/shared/signature/signature/signature.component';
 import { UsuarioService } from 'src/app/usuarios/usuario.service';
@@ -10,6 +11,9 @@ import { Browser } from '@capacitor/browser';
 import { ImageModalPage } from 'src/app/shared/image-modal/image-modal.page';
 import { IonicSlides } from '@ionic/angular';
 import Swiper from 'swiper';
+import { environment } from 'src/environments/environment';
+import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-detalle-reporte',
   templateUrl: './detalle-reporte.component.html',
@@ -18,30 +22,43 @@ import Swiper from 'swiper';
 export class DetalleReporteComponent implements OnInit {
   @Input() data: any;
   reporte: any;
+  @ViewChild(IonModal) modal: IonModal;
 
   //zoom img
   zoomActive = false;
   zoomScale = 1;
- 
-  @ViewChild('swipper')
-  swiperRef:ElementRef | undefined;
-  swiper?:Swiper
 
-  
+  @ViewChild('swipper')
+  swiperRef: ElementRef | undefined;
+  swiper?: Swiper
+
+  editable: boolean = true;
+  loading: boolean = true;
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+  recomendacion:any;
+
+  usuario:any;
   constructor(
     public modalCtrl: ModalController,
     private _reportes: ReportesService,
     private _usuario: UsuarioService,
     private alertController: AlertController,
     private loadingCtrl: LoadingController,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private _auth: AuthenticationService
   ) { }
 
   ngOnInit() {
     this.getReporte();
     //idreporte
     // this.data['idReporte'].toString()
-
+   this._auth.user$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((user) => {
+        console.log(user);
+        this.usuario = user;
+      });
   }
 
   handleRefresh(event: any) {
@@ -49,6 +66,10 @@ export class DetalleReporteComponent implements OnInit {
     this._reportes.getReporteID(this.data['idReporte'].toString()).subscribe({
       next: (data: any) => {
         this.reporte = data[0]
+        this.loading = false;
+        if (this.reporte['firmas'].length >= 3) {
+          this.editable = false;
+        }
       },
       error(err) { },
     });
@@ -56,12 +77,17 @@ export class DetalleReporteComponent implements OnInit {
 
 
   getReporte() {
-    console.log('Si hago busqueda');
-
     this.reporte = null
     this._reportes.getReporteID(this.data['idReporte'].toString()).subscribe({
       next: (data: any) => {
         this.reporte = data[0]
+        this.loading = false;
+        if (this.reporte['firmas'].length >= 3) {
+          this.editable = false;
+        }
+        if (this.reporte.recomendaciones) {
+          this.recomendacion = this.reporte.recomendaciones
+        }
       },
       error(err) { },
     });
@@ -70,14 +96,12 @@ export class DetalleReporteComponent implements OnInit {
   async agregarFoto(dataInfo: any) {
     const modal = await this.modalCtrl.create({
       component: DetalleObservacionComponent,
-      componentProps: { idObservacion: dataInfo['idObservacion'] }
+      componentProps: { idObservacion: dataInfo['idObservacion'] ,editable:this.editable}
     })
     modal.present();
     const { data, role } = await modal.onWillDismiss();
-    console.log(data);
 
     if (data) {
-      console.log('si entro');
       this.handleRefresh(true)
     }
   }
@@ -97,20 +121,16 @@ export class DetalleReporteComponent implements OnInit {
       formData.append('file', data.img);
       formData.append('tipo', data.type);
       formData.append('nombreFirma', data.nombreFirma);
-
-
       this._usuario.enviarFirma(formData).subscribe(res => {
         this.getReporte()
       })
     } else {
-      console.log(data);
     }
 
   }
 
 
   async openModalObservacion() {
-    console.log(this.data['idReporte'].toString());
 
     const modal = await this.modalCtrl.create({
       component: CrearObservacionComponent,
@@ -122,7 +142,6 @@ export class DetalleReporteComponent implements OnInit {
       this.getReporte()
 
     } else {
-      console.log(data);
     }
 
   }
@@ -165,7 +184,6 @@ export class DetalleReporteComponent implements OnInit {
 
 
   async deleteFirma(item: any) {
-    console.log(item);
     const alert = await this.alertController.create({
       header: "Alerta",
       message: "¿Desea eliminar firma?",
@@ -208,12 +226,14 @@ export class DetalleReporteComponent implements OnInit {
   }
 
   async exportPDf() {
-
-    await Browser.open({ url: 'https://revisionequiposapi-production.up.railway.app/reportes/pdf/view/'+this.data['idReporte'].toString() });
-
+    await Browser.open({ url: environment.API_URL +'/reportes/pdf/view/' + this.data['idReporte'].toString() });
   }
 
-  async openPreview(img:any) {
+  async exportPDf2() {
+    await Browser.open({ url: environment.API_URL +`/reportes/${this.data['idReporte'].toString()}/pdfReporte`});
+  }
+
+  async openPreview(img: any) {
     const modal = await this.modalCtrl.create({
       component: ImageModalPage,
       cssClass: 'transparent-modal',
@@ -224,38 +244,83 @@ export class DetalleReporteComponent implements OnInit {
     modal.present();
   }
 
-  async touchEnd(zoomslides:any, card:any) {
+  async touchEnd(zoomslides: any, card: any) {
     // Zoom back to normal
     const slider = await zoomslides.getSwiper();
     const zoom = slider.zoom;
     zoom.out();
-  
+
     // Card back to normal
     card.el.style['z-index'] = 9;
-  
+
     this.zoomActive = false;
     this.changeDetectorRef.detectChanges();
   }
-  
-  touchStart(card:any) {
+
+  touchStart(card: any) {
     // Make card appear above backdrop
     card.el.style['z-index'] = 11;
   }
-  
 
-  chage(event:any){
+
+  chage(event: any) {
     console.log(event);
-    
+
   }
 
-  swiperReady(){
-    console.log('if');
+  swiperReady() {
     this.swiper = this.swiperRef?.nativeElement.Swiper;
   }
 
-  goNext(){
+  goNext() {
     this.swiper?.slideNext();
   }
 
+  openmodal(){
+
+  }
+
+  cancel() {
+    this.recomendacion = ''
+    this.modal.dismiss(null, 'cancel');
+  }
+
+  confirm() {
+    this.modal.dismiss(this.recomendacion, 'confirm');
+  }
+  async onWillDismiss(event: Event) {
+
+
+    const ev = event as CustomEvent<OverlayEventDetail<string>>;
+
+    if (ev.detail.role === 'confirm') {
+      const loading = await this.loadingCtrl.create({
+        message: 'Guardando información...',
+      });
+      loading.present();
+  
+      const data = {
+        "recomendaciones": ev.detail.data,
+      }
+      this._reportes.editarRecomendacion(this.data['idReporte'].toString(),data).subscribe({
+        next:(value)=> {
+          loading.dismiss();
+          this.getReporte()
+        },
+         error:async (err)=> {
+          loading.dismiss();
+          const alert = await this.alertController.create({
+            header: 'Alerta',
+            subHeader: 'Intente más tarde',
+            message: 'Ha ocurrido un error',
+            buttons: ['OK'],
+          });
+          await alert.present();
+
+        },
+      })
+      this.recomendacion = `${ev.detail.data}`;
+    }
+  }
 
 }

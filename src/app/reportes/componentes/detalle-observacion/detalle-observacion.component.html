@@ -8,132 +8,131 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="informacionObs">
-
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-
   <section *ngIf="informacionObs">
-
     <ion-card>
       <ion-card-header>
-        <ion-card-title>Criticidad: {{informacionObs['criticidad']}}</ion-card-title>
+        <ion-card-title
+          >Criticidad: {{ informacionObs["criticidad"] }}</ion-card-title
+        >
         <!-- <ion-card-subtitle>{{data.fechaRegistro | date}} -  </ion-card-subtitle> -->
       </ion-card-header>
 
       <ion-card-content>
-        {{informacionObs['fechaRegistro'] | date}}
+        {{ informacionObs["fechaRegistro"] | date }}
       </ion-card-content>
     </ion-card>
 
-
     <div class="ion-padding" slot="content">
-
       <ion-card>
-
         <!-- <ion-card-header>
           <ion-card-title (click)="agregarFoto(data)">Observacion del reporte </ion-card-title>
           <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>   
           
         </ion-card-header> -->
 
-
         <section>
           <ion-item *ngIf="informacionObs.equipo">
             <ion-label>
               <h3>Equipo</h3>
-              <p>{{informacionObs.equipo}}</p>
+              <p>{{ informacionObs.equipo }}</p>
             </ion-label>
           </ion-item>
 
           <ion-item *ngIf="informacionObs.marca">
             <ion-label>
               <h3>Marca</h3>
-              <p>{{informacionObs.marca}}</p>
+              <p>{{ informacionObs.marca }}</p>
             </ion-label>
           </ion-item>
 
           <ion-item *ngIf="informacionObs.modelo">
             <ion-label>
               <h3>Modelo</h3>
-              <p>{{informacionObs.modelo}}</p>
+              <p>{{ informacionObs.modelo }}</p>
             </ion-label>
           </ion-item>
 
           <ion-item *ngIf="informacionObs.numeroSerie">
             <ion-label>
               <h3>N° de Serie</h3>
-              <p>{{informacionObs.numeroSerie}}</p>
+              <p>{{ informacionObs.numeroSerie }}</p>
             </ion-label>
           </ion-item>
 
           <ion-item *ngIf="informacionObs.area">
             <ion-label>
               <h3>Área</h3>
-              <p>{{informacionObs.area}}</p>
+              <p>{{ informacionObs.area }}</p>
             </ion-label>
           </ion-item>
-
 
           <ion-item *ngIf="informacionObs.criticidad">
             <ion-label>
               <h3>Criticidad</h3>
-              <p>{{informacionObs.criticidad}}</p>
+              <p>{{ informacionObs.criticidad }}</p>
             </ion-label>
           </ion-item>
         </section>
 
-
         <ion-card-content>
-          {{informacionObs.observacion}}
+          {{ informacionObs.observacion }}
         </ion-card-content>
-
-
-
-
-
-
-
       </ion-card>
     </div>
 
-
-
-
     <!-- //Seleccion multiple de observaciones y firmas -->
     <ion-accordion-group [animated]="false" expand="inset">
-
       <!-- //Primera seccion observacion -->
       <ion-accordion value="first">
         <ion-item slot="header" color="light">
           <ion-label>Imágenes</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content" *ngIf="informacionObs['observacionesImagen'].length > 0">
-          <swiper-container style="--swiper-pagination-color: #fff" class="mySwiper" zoom="true" navigation="true"
-          pagination="true" pagination-clickable="true">
-          <swiper-slide *ngFor="let item of informacionObs['observacionesImagen']">
-            <div class="swiper-zoom-container">
-              <ion-card>
+        <div
+          slot="content"
+          *ngIf="informacionObs['observacionesImagen'].length > 0"
+        >
+          <swiper-container
+            style="--swiper-pagination-color: #fff"
+            class="mySwiper"
+            zoom="true"
+            navigation="true"
+            rewind="true"
+          >
+            <swiper-slide
+              *ngFor="let item of informacionObs['observacionesImagen']"
+            >
+              <div class="swiper-zoom-container">
+                <img [src]="item['url']" />
                 <ion-item>
-                  <ion-label>{{item.fechaRegistro | date}}</ion-label>
-                  <ion-button fill="outline" slot="end" (click)="deleteImg(item)">x</ion-button>
+                  <ion-label>{{ item.fechaRegistro | date }}</ion-label>
+                  <ion-button
+                    fill="outline"
+                    slot="end"
+                    (click)="deleteImg(item)"
+                    *ngIf="editable"
+                    >x</ion-button
+                  >
+                  <ion-button
+                    fill="outline"
+                    slot="end"
+                    (click)="openPreview(item['url'])"
+                  >
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </ion-button>
                 </ion-item>
-
-                <ion-card-content>
-                  <img [src]="item['url']" />
-
-                </ion-card-content>
-              </ion-card>
-            </div>
-          </swiper-slide>
-        </swiper-container>
+              </div>
+            </swiper-slide>
+          </swiper-container>
         </div>
 
-
-
-
-        <div class="ion-padding" slot="content" *ngIf="informacionObs['observacionesImagen'].length == 0">
+        <div
+          slot="content"
+          *ngIf="informacionObs['observacionesImagen'].length == 0"
+        >
           <ion-grid>
             <ion-row>
               <ion-col>
@@ -144,7 +143,6 @@
             </ion-row>
           </ion-grid>
         </div>
-
       </ion-accordion>
 
       <!-- //Segunda seccion Firmas -->
@@ -153,20 +151,29 @@
           <ion-label>Comentarios</ion-label>
         </ion-item>
 
-        <div class="ion-padding" slot="content" *ngIf="informacionObs['observacionesComentario'].length > 0">
-          <ion-card *ngFor="let data of informacionObs['observacionesComentario']">
+        <div
+          class="ion-padding"
+          slot="content"
+          *ngIf="informacionObs['observacionesComentario'].length > 0"
+        >
+          <ion-card
+            *ngFor="let data of informacionObs['observacionesComentario']"
+          >
             <ion-card-header>
-              <ion-card-title>{{data.comentario}}</ion-card-title>
-              <ion-card-subtitle> {{data.user.nombre}} </ion-card-subtitle>
+              <ion-card-title>{{ data.comentario }}</ion-card-title>
+              <ion-card-subtitle> {{ data.user.nombre }} </ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              {{data.fechaRegistro | date}}
+              {{ data.fechaRegistro | date }}
             </ion-card-content>
-
           </ion-card>
         </div>
 
-        <div class="ion-padding" slot="content" *ngIf="informacionObs['observacionesComentario'].length == 0">
+        <div
+          class="ion-padding"
+          slot="content"
+          *ngIf="informacionObs['observacionesComentario'].length == 0"
+        >
           <ion-grid>
             <ion-row>
               <ion-col>
@@ -177,15 +184,10 @@
             </ion-row>
           </ion-grid>
         </div>
-
       </ion-accordion>
-
-
     </ion-accordion-group>
 
     <ion-content class="ion-padding">
-
-
       <ion-modal trigger="open-modal" (willDismiss)="onWillDismiss($event)">
         <ng-template>
           <ion-header>
@@ -195,15 +197,24 @@
               </ion-buttons>
               <ion-title>Comentario</ion-title>
               <ion-buttons slot="end">
-                <ion-button (click)="confirm()" [strong]="true">Enviar</ion-button>
+                <ion-button (click)="confirm()" [strong]="true"
+                  >Enviar</ion-button
+                >
               </ion-buttons>
             </ion-toolbar>
           </ion-header>
           <ion-content class="ion-padding">
             <ion-item>
               <!-- <ion-label position="stacked">Ingrese comentario</ion-label> -->
-              <ion-textarea fill="solid" label="Comentario" labelPlacement="floating" helperText="Escribe un comentario"
-                errorText="Invalid comentario" [(ngModel)]="comentario" autoGrow="true"></ion-textarea>
+              <ion-textarea
+                fill="solid"
+                label="Comentario"
+                labelPlacement="floating"
+                helperText="Escribe un comentario"
+                errorText="Invalid comentario"
+                [(ngModel)]="comentario"
+                autoGrow="true"
+              ></ion-textarea>
               <!-- <ion-input type="text" placeholder="Comentario" [(ngModel)]="comentario"></ion-input> -->
             </ion-item>
           </ion-content>
@@ -211,27 +222,21 @@
       </ion-modal>
     </ion-content>
 
+    <ion-item
+      slot="header"
+      color="light"
+      ng-reflect-color="light"
+      class="ion-color ion-color-light item md item-fill-none ion-focusable hydrated item-label item-lines-full ion-activatable"
+      ><ion-label
+        class="sc-ion-label-md-h sc-ion-label-md-s md in-item-color hydrated"
+        >Recomendaciones</ion-label
+      >
 
-
-    <!-- Recomendaciones -->
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Recomendaciones</ion-card-title>
-        <ion-card-subtitle>{{informacionObs.fechaRegistro | date}} </ion-card-subtitle>
-      </ion-card-header>
-
-      <!-- <ion-card-content>
-        {{reporte.recomendaciones || 'No tiene recomendaciones'}}
-      </ion-card-content> -->
-    </ion-card>
-
-
-
+      <ion-icon name="accessibility-outline"></ion-icon>
+    </ion-item>
 
 
   </section>
-
-
 </ion-content>
 
 <!-- Botones para podeer agregar firmas y observaciones -->
@@ -241,13 +246,16 @@
   </ion-fab-button>
   <ion-fab-list side="top">
     <!-- Firma -->
-    <ion-fab-button id="open-modal" expand="block" (click)="agregarComentario()">
+    <ion-fab-button
+      id="open-modal"
+      expand="block"
+      (click)="agregarComentario()"
+    >
       <ion-icon name="chatbox-outline"></ion-icon>
     </ion-fab-button>
     <!-- Observacion -->
-    <ion-fab-button (click)="agregarImagen()">
+    <ion-fab-button (click)="agregarImagen()" *ngIf="editable">
       <ion-icon name="camera-outline"></ion-icon>
     </ion-fab-button>
-
   </ion-fab-list>
 </ion-fab>

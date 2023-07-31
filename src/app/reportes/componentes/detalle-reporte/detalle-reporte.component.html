@@ -3,13 +3,17 @@
     <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
       <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
     </ion-buttons>
-    <ion-title>Reporte</ion-title>
+    <ion-title *ngIf="reporte">{{reporte.idReporte}} Reporte</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" *ngIf="reporte">
 
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-item *ngIf="loading" >
+      <ion-spinner name="lines-sharp"></ion-spinner>
+    </ion-item>
+    
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -38,13 +42,21 @@
           <ion-label>Observaciones</ion-label>
         </ion-item>
 
-        <div class="ion-padding" slot="content" *ngIf="reporte['observaciones'].length > 0">
+        <div slot="content" *ngIf="reporte['observaciones'].length > 0">
 
           <ion-card *ngFor="let data of reporte['observaciones']">
 
             <ion-card-header>
-              <ion-card-title (click)="agregarFoto(data)">Observacion del reporte </ion-card-title>
-              <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>
+              <ion-item>
+                <!-- <ion-label>Observacion del reporte </ion-label> -->
+                <ion-card-title >Observación </ion-card-title>
+                <ion-button fill="outline" slot="end" (click)="agregarFoto(data)">
+                  <ion-icon name="eye-outline"></ion-icon>
+                </ion-button>
+              </ion-item>
+
+        
+              <!-- <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle> -->
 
             </ion-card-header>
 
@@ -102,33 +114,25 @@
 
             <!-- ///iamges slide -->
 
-            <swiper-container style="--swiper-pagination-color: #fff" class="mySwiper"
-              zoom="true" navigation="true" pagination="true" pagination-clickable="true">
+            <swiper-container class="mySwiper" zoom="true" navigation="true"
+               rewind="true">
               <swiper-slide *ngFor="let item of data['imagenes']">
                 <div class="swiper-zoom-container">
-                  <ion-card>
-                    <ion-item>
-                      <ion-label>{{item.fechaRegistro | date}}</ion-label>
-                      <ion-button fill="outline" slot="end" (click)="deleteImg(item)">x</ion-button>
-                    </ion-item>
-              
-                    <ion-card-content>
-                      <img [src]="item['url']" />
 
-                    </ion-card-content>
-                  </ion-card>
+                      <img [src]="item['url']" />
+                      <ion-item>
+                        <ion-label>{{item.fechaRegistro | date}}</ion-label>
+                        <ion-button fill="outline" slot="end" (click)="deleteImg(item)" *ngIf="editable" >x</ion-button>
+                        <ion-button fill="outline" slot="end" (click)="openPreview(item['url'])"  >      <ion-icon name="eye-outline"></ion-icon>
+                        </ion-button>
+                      </ion-item>
                 </div>
               </swiper-slide>
             </swiper-container>
 
-            
 
 
             <!-- </ion-card> -->
-
-            <div *ngIf="zoomActive" class="backdrop" [style.opacity]="zoomScale"></div>
-
-
 
 
 
@@ -155,7 +159,7 @@
           <ion-label>Firmas</ion-label>
         </ion-item>
 
-        <div class="ion-padding" slot="content" *ngIf="reporte['firmas'].length > 0">
+        <div slot="content" *ngIf="reporte['firmas'].length > 0">
           <ion-card *ngFor="let data of reporte['firmas']">
             <img alt="Silhouette of mountains" [src]="data['url']" (click)="deleteFirma(data)" />
             <ion-card-header>
@@ -190,10 +194,18 @@
 
 
     <!-- Recomendaciones -->
-    <ion-card>
+  
+    <ion-card >
       <ion-card-header>
-        <ion-card-title>Recomendaciones</ion-card-title>
-        <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>
+        <ion-item>
+          <!-- <ion-label>Observacion del reporte </ion-label> -->
+          Recomendaciones 
+          <ion-button fill="outline" slot="end"  expand="block" id="open-modals" (click)="openmodal()"> 
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+
+        <!-- <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle> -->
       </ion-card-header>
 
       <ion-card-content>
@@ -201,15 +213,45 @@
       </ion-card-content>
     </ion-card>
 
-
-
-
-
+    <ion-content class="ion-padding">
+      <ion-modal trigger="open-modals" (willDismiss)="onWillDismiss($event)">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button (click)="cancel()">Cancelar</ion-button>
+              </ion-buttons>
+              <ion-title>Recomendación</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="confirm()" [strong]="true"
+                  >Enviar</ion-button
+                >
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <ion-item>
+              <!-- <ion-label position="stacked">Ingrese comentario</ion-label> -->
+              <ion-textarea
+                fill="solid"
+                label="Recomendación"
+                labelPlacement="floating"
+                helperText="Escribe recomendación"
+                [(ngModel)]="recomendacion"
+                autoGrow="true"
+              ></ion-textarea>
+              <!-- <ion-input type="text" placeholder="Comentario" [(ngModel)]="comentario"></ion-input> -->
+            </ion-item>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </ion-content>
+  
   </section>
 
 
 
-
+  
 
 
 </ion-content>
@@ -221,17 +263,23 @@
   </ion-fab-button>
   <ion-fab-list side="top">
     <!-- Firma -->
-    <ion-fab-button (click)="openModalFirma()">
+    <ion-fab-button *ngIf="editable" (click)="openModalFirma()">
       <ion-icon name="pencil-outline"></ion-icon>
     </ion-fab-button>
+
+    <ion-fab-button  (click)="exportPDf2()" *ngIf="!editable">
+      <ion-icon name="arrow-undo-outline"></ion-icon>
+    </ion-fab-button>
+
+
     <!-- Observacion -->
-    <ion-fab-button (click)="openModalObservacion()">
+    <ion-fab-button *ngIf="editable" (click)="openModalObservacion()">
       <ion-icon name="receipt-outline"></ion-icon>
     </ion-fab-button>
     <!-- ver Reporte -->
-    <ion-fab-button (click)="exportPDf()">
+    <!-- <ion-fab-button (click)="exportPDf()"  >
       <ion-icon name="eye-outline"></ion-icon>
-    </ion-fab-button>
+    </ion-fab-button> -->
 
   </ion-fab-list>
 </ion-fab>

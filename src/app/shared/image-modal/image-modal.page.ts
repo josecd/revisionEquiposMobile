@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef } from '@angular/core';
 import { ModalController, IonicSlides } from '@ionic/angular';
+import Swiper from 'swiper';
 
 @Component({
   selector: 'app-image-modal',
@@ -7,28 +8,23 @@ import { ModalController, IonicSlides } from '@ionic/angular';
   styleUrls: ['./image-modal.page.scss'],
 })
 export class ImageModalPage implements OnInit {
-  @ViewChild(IonicSlides) slides: any;
   @Input('img')img: any;
+  @ViewChild('swipper')
+  swiperRef: ElementRef | undefined;
+  swiper?: Swiper
 
-  sliderOpts = {
-    zoom: true
-  };
 
-  constructor(private modalController: ModalController) { }
+  constructor(
+    private modalController: ModalController,
+    public modalCtrl: ModalController,
+    ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log(this.img);
+    
+   }
 
-  ionViewDidEnter(){
-    this.slides.update();
-  }
-
-  async zoom(zoomIn: boolean) {
-    const slider = await this.slides.getSwiper();
-    const zoom = slider.zoom;
-    zoomIn ? zoom.in() : zoom.out();
-  }
-
-  close() {
-    this.modalController.dismiss();
+   return() {
+    this.modalCtrl.dismiss()
   }
 }

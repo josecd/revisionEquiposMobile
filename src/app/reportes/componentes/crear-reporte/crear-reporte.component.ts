@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, LoadingController, ModalController } from '@ionic/angular';
 import { ReportesService } from '../../services/reportes.service';
 import { Storage } from '@ionic/storage';
@@ -39,8 +39,8 @@ export class CrearReporteComponent  implements OnInit {
       error(err) {},
     });
     this.ionicForm = this.formBuilder.group({
-      descripcion: ['',],
-      hotelId: [''],
+      descripcion: ['',[Validators.required, ]],
+      hotelId: ['',[Validators.required ]],
       userId:[''],
     });
 
@@ -69,7 +69,8 @@ export class CrearReporteComponent  implements OnInit {
     });
     loading.present();
 
-
+    console.log(this.ionicForm.value);
+    
     this._reporte.crearReporte(this.ionicForm.value).subscribe({
       next: (data:any) => {
         console.log(data);

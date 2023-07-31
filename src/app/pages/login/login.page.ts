@@ -1,6 +1,6 @@
 import { Component, ContentChild, OnInit } from '@angular/core';
 import { LoginService } from '../login.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertController, IonInput, LoadingController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
@@ -17,6 +17,9 @@ export class LoginPage implements OnInit {
   ionicForm: FormGroup;
   pwdIcon = "eye-outline";
   showPwd = false;
+
+  /////
+  credentials: FormGroup;
   @ContentChild(IonInput) input: IonInput;
   constructor(
     private _login: LoginService,
@@ -26,7 +29,12 @@ export class LoginPage implements OnInit {
     private alertController: AlertController,
     private router: Router,
     private storage: Storage,
-    private _auth:AuthenticationService
+    private _auth:AuthenticationService,
+
+
+    private fb: FormBuilder,
+		private authService: AuthenticationService,
+		private loadingController: LoadingController
   ) {
     this.ionicForm = this.formBuilder.group({
       correo: ['',],
@@ -37,7 +45,10 @@ export class LoginPage implements OnInit {
 
   async ngOnInit() {
     this.load()
-    
+    this.credentials = this.fb.group({
+			correo: [''],
+			clave: []
+		});
   }
 
 
@@ -65,14 +76,13 @@ export class LoginPage implements OnInit {
     this._auth.login(this.ionicForm.value).subscribe({
       next: async (data:any) => {
         loading.dismiss();          
-        console.log(data);
+        console.log('verificar datos',data['user']);
         
         await this.storage.set('key', data['access_token']);
         await this.storage.set('user', data['user']);
         this.router.navigate(['/reportes'])
       },
       error: async (err) => {
-        console.log(err);
         
         loading.dismiss();
 
@@ -117,7 +127,37 @@ export class LoginPage implements OnInit {
     this.showPwd = !this.showPwd;
     this.pwdIcon = this.showPwd ? "eye-off-outline" : "eye-outline";
   }
+  /////////
 
+	async login1() {
+		const loading = await this.loadingController.create();
+		await loading.present();
 
+		this.authService.login(this.credentials.value).subscribe(
+			async (res) => {
+				await loading.dismiss();
+				this.router.navigateByUrl('/tabs', { replaceUrl: true });
+			},
+			async (res) => {
+				await loading.dismiss();
+				const alert = await this.alertController.create({
+					header: 'Login failed',
+					message: res.error.error,
+					buttons: ['OK']
+				});
+
+				await alert.present();
+			}
+		);
+	}
+
+	// Easy access for form fields
+	get email() {
+		return this.credentials.get('email');
+	}
+
+	get password() {
+		return this.credentials.get('password');
+	}
 
 }
