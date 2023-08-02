@@ -4,6 +4,10 @@
       <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
     </ion-buttons>
     <ion-title *ngIf="reporte">{{reporte.idReporte}} Reporte</ion-title>
+
+    <ion-buttons *ngIf="usuario?.idUsuario === 2 || usuario?.idUsuario === 1|| usuario?.idUsuario === 6" slot="end" class="ion-margin-horizontal" (click)="exportPDf()">
+      <ion-icon name="eye-outline"></ion-icon>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -27,7 +31,7 @@
       </ion-card-header>
 
       <ion-card-content>
-        {{reporte['hoteles'][0]['fechaRegistro'] | date}}
+        {{reporte['fechaRegistro'] | date}}
       </ion-card-content>
     </ion-card>
 
@@ -199,7 +203,7 @@
       <ion-card-header>
         <ion-item>
           <!-- <ion-label>Observacion del reporte </ion-label> -->
-          Recomendaciones 
+          Comentario 
           <ion-button fill="outline" slot="end"  expand="block" id="open-modals" (click)="openmodal()"> 
             <ion-icon name="create-outline"></ion-icon>
           </ion-button>

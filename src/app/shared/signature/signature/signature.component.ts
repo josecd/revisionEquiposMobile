@@ -46,7 +46,7 @@ export class SignatureComponent implements AfterViewInit {
     },
   ];
   selectTipo: any;
-  nombre: any;
+  nombre: any ='';
 
   tipoFirma: boolean = true;
 
@@ -107,6 +107,16 @@ export class SignatureComponent implements AfterViewInit {
   async saveSignature() {
 
     if (this.tipoFirma) {
+        if (!this.nombre) {
+          const alert = await this.alertController.create({
+            header: 'Alerta',
+            subHeader: '',
+            message: 'Se debe rellenar el nombre',
+            buttons: ['OK'],
+          });
+          await alert.present();
+          return
+        }
       if (this.signaturePad._isEmpty) {
 
         const alert = await this.alertController.create({
@@ -227,12 +237,19 @@ export class SignatureComponent implements AfterViewInit {
   }
 
   getBase64Image(img:any) {
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
+    
+    var canvas:any = document.createElement("canvas");
+    canvas.width = 318;
+    canvas.height =100;
     var ctx:any = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0);
-    var dataURL = canvas.toDataURL("image/png");
+    ctx.drawImage(img, 0, 0,318 ,100);
+    var dataURL = canvas.toDataURL({
+      format: 'png',
+      left: 300,
+      top: 250,
+      width: 200,
+      height: 150
+  });
     return dataURL
   }
 }

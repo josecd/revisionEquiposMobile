@@ -19,6 +19,11 @@ export class ReportesService {
     return this._httpClient.get(environment.API_URL + '/reportes');
   }
 
+  getReportesMobile(data:any) {
+    return this._httpClient.post(environment.API_URL + '/reportes/filtermobile',data);
+  }
+
+
   getReporteID(id: number) {
     return this._httpClient.get(environment.API_URL + `/reportes/${id}`);
   }
@@ -56,6 +61,14 @@ export class ReportesService {
   crearObservacionReporte(data: any) {
     return this._httpClient.post(
       environment.API_URL + "/observaciones/crear",
+      data
+    );
+  }
+
+  
+  updateObservacionReporte(data: any,id:any) {
+    return this._httpClient.patch(
+      environment.API_URL + `/observaciones/${id}`,
       data
     );
   }

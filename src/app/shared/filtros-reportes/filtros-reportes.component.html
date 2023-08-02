@@ -1,0 +1,15 @@
+<!-- <ion-list>
+  <ion-list-header>Ionic</ion-list-header>
+  <ion-item button (click)="dismissPopover('Learn Ionic')">Learn Ionic</ion-item>
+  <ion-item button (click)="dismissPopover('Documentation')">Documentation</ion-item>
+  <ion-item button (click)="dismissPopover('Showcase')">Showcase</ion-item>
+  <ion-item button (click)="dismissPopover('GitHub Repo')">GitHub Repo</ion-item>
+  <ion-item lines="none" detail="false" button (click)="dismissPopover('')">Close</ion-item>
+</ion-list> -->
+
+<ion-datetime locale="es-ES" presentation="month-year" [value]="datevalue" (ionChange)="updateMyDate($event)"></ion-datetime>
+<br>
+<ion-select aria-label="Hoteles" placeholder="Selecciona hotel" [multiple]="true" (ionChange)="handleChange($event)">
+  <ion-select-option *ngFor="let hotel of hoteles" [value]="hotel.idHotel" >{{ hotel.nombre }}</ion-select-option>
+</ion-select>
+<ion-button expand="block" (click)="dismissPopover()">Filtrar</ion-button>

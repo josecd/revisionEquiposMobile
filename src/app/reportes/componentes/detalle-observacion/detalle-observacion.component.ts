@@ -6,6 +6,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { Storage } from '@ionic/storage';
 import Swiper from 'swiper';
 import { ImageModalPage } from 'src/app/shared/image-modal/image-modal.page';
+import { CrearObservacionComponent } from '../crear-observacion/crear-observacion.component';
 
 @Component({
   selector: 'app-detalle-observacion',
@@ -51,9 +52,8 @@ export class DetalleObservacionComponent implements OnInit {
     this._reporte.getObservacion(this.idObservacion).subscribe(
       {
         next: (res) => {
-          console.log(res);
-          
           this.informacionObs = res;
+          
         },
         error: (err) => {
 
@@ -197,4 +197,19 @@ export class DetalleObservacionComponent implements OnInit {
       });
       modal.present();
     }
+
+    async openEdit(){
+      const modal = await this.modalCtrl.create({
+        component: CrearObservacionComponent,
+        componentProps: { idReporte:  this.informacionObs.reporteId , editM:true , data:this.informacionObs }
+      });
+      modal.present();
+      const { data, role } = await modal.onWillDismiss();
+      if (data) {
+        this.load()
+  
+      } else {
+      }
+    }
+
 }

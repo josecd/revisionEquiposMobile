@@ -56,7 +56,6 @@ export class DetalleReporteComponent implements OnInit {
    this._auth.user$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((user) => {
-        console.log(user);
         this.usuario = user;
       });
   }
@@ -134,7 +133,7 @@ export class DetalleReporteComponent implements OnInit {
 
     const modal = await this.modalCtrl.create({
       component: CrearObservacionComponent,
-      componentProps: { idReporte: this.data['idReporte'].toString() }
+      componentProps: { idReporte: this.data['idReporte'].toString(), editM:false }
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();

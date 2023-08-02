@@ -94,6 +94,10 @@
       </ion-col>
     </ion-row>
 
+    <!-- <canvas id="canvas"width="318" height="120"></canvas> -->
+
+
+
     <ion-row
       style="display: flex; justify-content: center; align-items: center"
     >
@@ -113,7 +117,7 @@
           <ion-button
             fill="clear"
             class="action-button"
-            [disabled]="!this.selectTipo && !this.nombre"
+            [disabled]="!this.selectTipo"
             (click)="saveSignature()"
           >
             Grabar

@@ -1,7 +1,7 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { PluginListenerHandle } from "@capacitor/core";
 import { ScreenOrientation } from "@capawesome/capacitor-screen-orientation";
-import { AlertController, LoadingController, ModalController, Platform } from "@ionic/angular";
+import { AlertController, LoadingController, ModalController, Platform, PopoverController } from "@ionic/angular";
 import { ReportesService } from "./services/reportes.service";
 import { BehaviorSubject } from "rxjs";
 import { SignatureComponent } from "../shared/signature/signature/signature.component";
@@ -9,6 +9,8 @@ import { DetalleReporteComponent } from "./componentes/detalle-reporte/detalle-r
 import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte.component";
 import { Browser } from '@capacitor/browser';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
+import { FiltrosReportesComponent } from "../shared/filtros-reportes/filtros-reportes.component";
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: "app-reportes",
@@ -17,44 +19,43 @@ import { InfiniteScrollCustomEvent } from '@ionic/angular';
 })
 export class ReportesPage implements OnInit {
   public currentOrientation = "";
-
   reportesList: any = [];
   loading: boolean = true;
-
   lists: any[] = [];
-
   page = 0;
   perPage = 10;
-
   array: any[] = [];
-
-
-
   dattemp = []
   items = [];
   count: number = 0;
 
+  hoteles:'';
+  mes: any;
+  anio: any
   constructor(
     private readonly platform: Platform,
     private readonly ngZone: NgZone,
     private _reporte: ReportesService,
     public modalCtrl: ModalController,
     private alertController: AlertController,
-    private loadingCtrl: LoadingController
-
+    private loadingCtrl: LoadingController,
+    private popCtrl: PopoverController
   ) {
 
   }
 
   handleRefresh(event: any) {
-
     this.lists = []
     this.array = []
     this.page = 0
     this.perPage = 10;
-    this._reporte.getReportes().subscribe({
+    const filtros: any = {
+      mes: this.mes,
+      anio: this.anio,
+      hotel: this.hoteles
+    }
+    this._reporte.getReportesMobile(filtros).subscribe({
       next: async (data: any) => {
-        console.log(data);
         
         this.array = data;
         this.lists = this.paginateArray();
@@ -66,6 +67,8 @@ export class ReportesPage implements OnInit {
   }
 
   public ngOnInit() {
+    this.mes = moment().month()+1;
+    this.anio = moment().year();
     this.reportes();
   }
 
@@ -78,9 +81,13 @@ export class ReportesPage implements OnInit {
     this.array = []
     this.page = 0
     this.perPage = 10;
-    this._reporte.getReportes().subscribe({
+    const filtros: any = {
+      mes: this.mes,
+      anio: this.anio,
+      hotel: this.hoteles
+    }
+    this._reporte.getReportesMobile(filtros).subscribe({
       next: async (data: any) => {
-        console.log(data);
 
         this.array = data;
         this.lists = this.paginateArray();
@@ -231,5 +238,19 @@ export class ReportesPage implements OnInit {
     }, 500);
   }
 
+  async _popOver(ev: any) {
+    const popOver = await this.popCtrl.create({
+      component: FiltrosReportesComponent,
+      cssClass: 'my-popover-class',
+      event: ev,
+    })
+    popOver.onDidDismiss().then(data=> {
+      this.mes = data.data['fromPop']['mes']
+      this.anio = data.data['fromPop']['anio']
+      this.hoteles = data.data['fromPop']['hotel']
+      this.reportes()
+    })
+    return await popOver.present()
+  }
 
 }

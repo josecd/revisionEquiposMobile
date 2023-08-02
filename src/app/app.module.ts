@@ -13,10 +13,11 @@ import { IonicStorageModule } from '@ionic/storage-angular';
 import { InterceptorService } from "./services/interceptor.service";
 import { register } from 'swiper/element/bundle';
 import { SignatureUsuarioComponent } from "./shared/signature-usuario/signature-usuario.component";
+import { FiltrosReportesComponent } from "./shared/filtros-reportes/filtros-reportes.component";
 register();
 
 @NgModule({
-  declarations: [AppComponent, SignatureComponent,SignatureUsuarioComponent],
+  declarations: [AppComponent, SignatureComponent,SignatureUsuarioComponent,FiltrosReportesComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

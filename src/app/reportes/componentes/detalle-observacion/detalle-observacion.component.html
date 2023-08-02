@@ -21,6 +21,8 @@
         <!-- <ion-card-subtitle>{{data.fechaRegistro | date}} -  </ion-card-subtitle> -->
       </ion-card-header>
 
+
+         
       <ion-card-content>
         {{ informacionObs["fechaRegistro"] | date }}
       </ion-card-content>
@@ -29,10 +31,18 @@
     <div class="ion-padding" slot="content">
       <ion-card>
         <!-- <ion-card-header>
-          <ion-card-title (click)="agregarFoto(data)">Observacion del reporte </ion-card-title>
-          <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle>   
-          
+          <ion-card-title >Información </ion-card-title>
         </ion-card-header> -->
+
+        <ion-card-header>
+          <ion-item>
+            <ion-card-title >Información </ion-card-title>
+            <ion-button fill="outline" slot="end" (click)="openEdit()">
+              <ion-icon name="create-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-card-header>
+
 
         <section>
           <ion-item *ngIf="informacionObs.equipo">
@@ -148,7 +158,7 @@
       <!-- //Segunda seccion Firmas -->
       <ion-accordion value="second">
         <ion-item slot="header" color="light">
-          <ion-label>Comentarios</ion-label>
+          <ion-label>Recomendaciones</ion-label>
         </ion-item>
 
         <div
@@ -195,7 +205,7 @@
               <ion-buttons slot="start">
                 <ion-button (click)="cancel()">Cancelar</ion-button>
               </ion-buttons>
-              <ion-title>Comentario</ion-title>
+              <ion-title>Recomendación</ion-title>
               <ion-buttons slot="end">
                 <ion-button (click)="confirm()" [strong]="true"
                   >Enviar</ion-button
@@ -222,18 +232,6 @@
       </ion-modal>
     </ion-content>
 
-    <ion-item
-      slot="header"
-      color="light"
-      ng-reflect-color="light"
-      class="ion-color ion-color-light item md item-fill-none ion-focusable hydrated item-label item-lines-full ion-activatable"
-      ><ion-label
-        class="sc-ion-label-md-h sc-ion-label-md-s md in-item-color hydrated"
-        >Recomendaciones</ion-label
-      >
-
-      <ion-icon name="accessibility-outline"></ion-icon>
-    </ion-item>
 
 
   </section>
