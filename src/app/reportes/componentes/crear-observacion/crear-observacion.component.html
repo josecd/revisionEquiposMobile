@@ -9,7 +9,6 @@
 
   <ion-content *ngIf="edit"  [fullscreen]="true" class="ion-padding">
     <section>
-      <h1>Editar</h1>
       <form [formGroup]="ionicForm" >
 
         <ion-item lines="full">
@@ -39,8 +38,10 @@
 
         <ion-item lines="full">
           <ion-label position="floating">Observación</ion-label>
-          <ion-textarea formControlName="observacion"   [counter]="true"
+          <ion-textarea formControlName="observacion" autoGrow="true"  [counter]="true"
           ></ion-textarea>
+          <ion-button expand="block" *ngIf="ionicForm.value['observacion']" (click)="verificarTexto()">Verificar Texto</ion-button>
+
         </ion-item>
 
 
@@ -72,7 +73,6 @@
 
   <ion-content *ngIf="!edit" [fullscreen]="true" class="ion-padding" >
     <section>
-      <h1>!Editar</h1>
 
       <form [formGroup]="ionicForm" >
 
@@ -103,8 +103,10 @@
   
         <ion-item lines="full">
           <ion-label position="floating">Observación</ion-label>
-          <ion-textarea formControlName="observacion"   [counter]="true"
+          <ion-textarea formControlName="observacion"  autoGrow="true" [counter]="true"
           ></ion-textarea>
+          <ion-button *ngIf="ionicForm.value['observacion']"  expand="block" (click)="verificarTexto()">Verificar Texto</ion-button>
+
         </ion-item>
 
         <ion-item lines="full">
@@ -120,7 +122,7 @@
   
         <ion-row>
           <ion-col>
-            <ion-button type="submit" color="danger" expand="block" (click)="updateForm()">Guardar</ion-button>
+            <ion-button type="submit" color="danger" expand="block" (click)="submitForm()">Guardar</ion-button>
           </ion-col>
         </ion-row>
       </form>

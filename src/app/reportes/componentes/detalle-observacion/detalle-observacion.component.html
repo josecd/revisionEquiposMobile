@@ -218,15 +218,18 @@
               <!-- <ion-label position="stacked">Ingrese comentario</ion-label> -->
               <ion-textarea
                 fill="solid"
-                label="Comentario"
+                label="Recomendación"
                 labelPlacement="floating"
-                helperText="Escribe un comentario"
-                errorText="Invalid comentario"
+                helperText="Escribe Recomendación"
+                errorText="Invalid Recomendación"
                 [(ngModel)]="comentario"
                 autoGrow="true"
               ></ion-textarea>
+
               <!-- <ion-input type="text" placeholder="Comentario" [(ngModel)]="comentario"></ion-input> -->
             </ion-item>
+            <ion-button expand="block"  *ngIf="comentario" (click)="verificarTexto()">Verificar Texto</ion-button>
+
           </ion-content>
         </ng-template>
       </ion-modal>

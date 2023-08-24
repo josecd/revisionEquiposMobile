@@ -106,4 +106,13 @@ export class ReportesService {
       data
     );
   }
+
+  textoCorreccionIA(data:any){ 
+    console.log(data);
+    
+    return this._httpClient.post(
+      environment.API_URL + `/users/correccion`,
+      data
+    );
+  }
 }

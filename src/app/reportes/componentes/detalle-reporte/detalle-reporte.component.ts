@@ -293,6 +293,7 @@ export class DetalleReporteComponent implements OnInit {
     const ev = event as CustomEvent<OverlayEventDetail<string>>;
 
     if (ev.detail.role === 'confirm') {
+
       const loading = await this.loadingCtrl.create({
         message: 'Guardando información...',
       });
@@ -322,4 +323,45 @@ export class DetalleReporteComponent implements OnInit {
     }
   }
 
+  async verificarTexto(){
+      const loading2 = await this.loadingCtrl.create({
+        message: 'Consultando información...',
+      });
+      loading2.present();
+      console.log(this.recomendacion);
+        const datos={
+          "text":this.recomendacion
+        }
+      this._reportes.textoCorreccionIA(datos).subscribe(async (res:any)=>{
+        loading2.dismiss();          
+        
+        const alert = await this.alertController.create({
+          header: "Texto Modificado",
+          message: res['response'],
+          buttons: [
+            {
+              text: "Cancelar",
+              role: "cancel",
+              handler: () => {
+                console.log("Declined the offer");
+              },
+            },
+            {
+              text: "Aceptar",
+              handler: async () => {
+                // const loading = await this.loadingCtrl.create({
+                //   message: 'Borrando imagen...',
+                // });
+                // loading.present();
+                this.recomendacion = res['response']
+              },
+            },
+          ],
+        });
+    
+        await alert.present();
+        
+      })
+
+  }
 }

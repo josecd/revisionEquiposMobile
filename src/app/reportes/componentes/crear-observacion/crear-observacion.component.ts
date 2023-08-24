@@ -39,12 +39,14 @@ export class CrearObservacionComponent  implements OnInit {
     private loadingCtrl: LoadingController,
     private _reporte:ReportesService,
     private alertController: AlertController,
-    private storage: Storage
+    private storage: Storage,
+  
   ) { 
 
   }
 
   async ngOnInit() {
+    console.log(this.editM);
     
     this.edit= this.editM;
 
@@ -85,6 +87,17 @@ export class CrearObservacionComponent  implements OnInit {
   }
   
   async submitForm(){
+    
+    if (!this.ionicForm.value['criticidad']) {
+      const alert = await this.alertController.create({
+        header: 'Alerta',
+        subHeader: 'Tiene que agregar criticidad para poder guardar',
+        message: 'Ha ocurrido un error',
+        buttons: ['OK'],
+      });
+      await alert.present();
+      return;
+    }
     const loading = await this.loadingCtrl.create({
       message: 'Subiendo información...',
     });
@@ -148,4 +161,45 @@ export class CrearObservacionComponent  implements OnInit {
   compareWith(o1:any, o2:any) {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
+
+  async verificarTexto(){
+    const loading2 = await this.loadingCtrl.create({
+      message: 'Consultando información...',
+    });
+    loading2.present();
+      const datos={
+        "text":this.ionicForm.value['observacion']
+      }
+    this._reporte.textoCorreccionIA(datos).subscribe(async (res:any)=>{
+      loading2.dismiss();          
+      
+      const alert = await this.alertController.create({
+        header: "Texto Modificado",
+        message: res['response'],
+        buttons: [
+          {
+            text: "Cancelar",
+            role: "cancel",
+            handler: () => {
+              console.log("Declined the offer");
+            },
+          },
+          {
+            text: "Aceptar",
+            handler: async () => {
+              // const loading = await this.loadingCtrl.create({
+              //   message: 'Borrando imagen...',
+              // });
+              // loading.present();
+              this.ionicForm.get('observacion')?.setValue(res['response'])
+            },
+          },
+        ],
+      });
+  
+      await alert.present();
+      
+    })
+
+}
 }
