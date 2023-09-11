@@ -236,13 +236,25 @@ export class DetalleReporteComponent implements OnInit {
 
     } else if (this.data['tipoReporte'] === 'Mantenimiento Preventivo') {
       await Browser.open({ url: environment.API_URL + '/reportes/pdf/view/' + this.data['idReporte'].toString() + "/Mantenimiento" });
-
     }
 
   }
 
   async exportPDf2() {
-    await Browser.open({ url: environment.API_URL + `/reportes/${this.data['idReporte'].toString()}/pdfReporte` });
+    if (this.data['tipoReporte'] === 'Recorrido' || !this.data['tipoReporte'] ) {
+      await Browser.open({ url: environment.API_URL + `/reportes/${this.data['idReporte'].toString()}/pdfReporte/Recorrido` });
+
+    } else if (this.data['tipoReporte'] === 'Baja') {
+      await Browser.open({ url: environment.API_URL + `/reportes/${this.data['idReporte'].toString()}/pdfReporte/Baja` });
+
+
+    } else if (this.data['tipoReporte'] === 'Mantenimiento Correctivo') {
+      await Browser.open({ url: environment.API_URL + `/reportes/${this.data['idReporte'].toString()}/pdfReporte/Mantenimiento` });
+
+    } else if (this.data['tipoReporte'] === 'Mantenimiento Preventivo') {
+      await Browser.open({ url: environment.API_URL + `/reportes/${this.data['idReporte'].toString()}/pdfReporte/Mantenimiento` });
+
+    }
   }
 
   async openPreview(img: any) {
