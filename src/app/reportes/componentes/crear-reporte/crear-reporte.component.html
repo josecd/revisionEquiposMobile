@@ -25,13 +25,25 @@
         <ion-item lines="full">
             <ion-select
               aria-label="Hoteles"
-              placeholder="Selecciona hotel"
+              placeholder="Selecciona Hotel"
               formControlName="hotelId" 
               (ionChange)="handleChange($event)"
             >
               <ion-select-option *ngFor="let hotel of hoteles" [value]="hotel.idHotel">{{ hotel.nombre }}</ion-select-option>
             </ion-select>
         </ion-item>
+
+
+        <ion-item lines="full">
+          <ion-select
+            aria-label="Tipo Reporte"
+            placeholder="Tipo Reporte"
+            formControlName="tipoReporte" 
+          >
+            <ion-select-option  [interfaceOptions]="{cssClass: 'my-class'}" *ngFor="let tipo of tipoReporte" [value]="tipo.id">{{ tipo.nombre }}</ion-select-option>
+          </ion-select>
+      </ion-item>
+
 
         <ion-row>
           <ion-col>

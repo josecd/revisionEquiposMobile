@@ -34,7 +34,8 @@
         <ion-item (click)="openReporte(data)">
           <ion-label>
             <h2>{{data.idReporte}}.- {{data?.descripcion || 'No hay una descripción' }}</h2>
-            <p>{{data?.hoteles?.nombre}}</p>
+            <p>Locación: {{data?.hoteles?.nombre}}</p>
+            <p>Tipo: {{data?.tipoReporte}}</p>
             <p> {{data['fechaRegistro'] | date}}</p>
 
           </ion-label>

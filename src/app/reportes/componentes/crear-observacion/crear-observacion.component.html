@@ -8,7 +8,7 @@
   </ion-header>
 
   <ion-content *ngIf="edit"  [fullscreen]="true" class="ion-padding">
-    <section>
+    <section>¨
       <form [formGroup]="ionicForm" >
 
         <ion-item lines="full">
@@ -31,12 +31,82 @@
           <ion-input formControlName="numeroSerie" type="text" aria-label="numeroSerie"></ion-input>
         </ion-item>
 
-        <ion-item lines="full">
+        <ion-item lines="full" *ngIf="tipoReporte == 'Recorrido' || !tipoReporte" >
           <ion-label position="floating">Área</ion-label>
           <ion-input formControlName="area" type="text" aria-label="area  "></ion-input>
         </ion-item>
 
-        <ion-item lines="full">
+        <!-- //Baja -->
+        <section *ngIf="tipoReporte == 'Baja'" >
+          <ion-item lines="full">
+            <ion-label position="floating">Adquisición del equipo</ion-label>
+            <ion-input formControlName="adquisicionEquipo" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+          
+          <ion-item lines="full">
+            <ion-label position="floating">Ubicación</ion-label>
+            <ion-input formControlName="ubicacion" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+  
+          <ion-item lines="full">
+            <ion-label position="floating">OC</ion-label>
+            <ion-input formControlName="oc" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+  
+          <ion-item lines="full">
+            <ion-label position="floating">ID-SAP</ion-label>
+            <ion-input formControlName="sapID" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+  
+  
+          <ion-item lines="full">
+            <ion-label position="floating">Diagnóstico Técnico</ion-label>
+            <ion-textarea formControlName="diagnosticoTecnico"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+  
+          <ion-item lines="full">
+            <ion-label position="floating">Motivo Daño</ion-label>
+            <ion-textarea formControlName="motivoDanio"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+  
+        </section>
+        <!-- ----Baja -->
+
+
+         <!-- MTT P&C -->
+        <section *ngIf="tipoReporte == 'Mantenimiento Correctivo' || tipoReporte == 'Mantenimiento Preventivo'" >
+
+          <ion-item lines="full">
+            <ion-label position="floating">Ubicación</ion-label>
+            <ion-input formControlName="ubicacion" type="text" aria-label="area"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Diagnóstico del equipo al llegar técnico</ion-label>
+            <ion-textarea formControlName="diagnosticoTecnico"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+
+
+          <ion-item lines="full">
+            <ion-label position="floating">Fallas detectadas durante el servicio</ion-label>
+            <ion-textarea formControlName="fallaDetectadaDuraSer"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Comentario a la entrega del equipo</ion-label>
+            <ion-textarea formControlName="comentariosEntregaEquip"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+
+
+        </section>        
+         <!-- MTT P&C -->
+
+        <ion-item lines="full" *ngIf="tipoReporte == 'Recorrido' || !tipoReporte" >
           <ion-label position="floating">Observación</ion-label>
           <ion-textarea formControlName="observacion" autoGrow="true"  [counter]="true"
           ></ion-textarea>
@@ -46,7 +116,7 @@
 
 
 
-        <ion-item lines="full">
+        <ion-item lines="full" *ngIf="tipoReporte == 'Recorrido' || !tipoReporte" >
           <ion-select
             aria-label="Criticidad"
             placeholder="Selecciona criticidad"
@@ -96,27 +166,102 @@
           <ion-input formControlName="numeroSerie" type="text" aria-label="numeroSerie"></ion-input>
         </ion-item>
   
-        <ion-item lines="full">
-          <ion-label position="floating">Área</ion-label>
+        <ion-item lines="full" *ngIf="tipoReporte=='Recorrido'" >
+          <ion-label position="floating" >Área</ion-label>
           <ion-input formControlName="area" type="text" aria-label="area  "></ion-input>
         </ion-item>
   
-        <ion-item lines="full">
+        <!-- //Baja -->
+        <section *ngIf="tipoReporte == 'Baja'" >
+          <ion-item lines="full">
+            <ion-label position="floating">Adquisición del equipo</ion-label>
+            <ion-input formControlName="adquisicionEquipo" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+          
+          <ion-item lines="full">
+            <ion-label position="floating">Ubicación</ion-label>
+            <ion-input formControlName="ubicacion" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+  
+          <ion-item lines="full">
+            <ion-label position="floating">OC</ion-label>
+            <ion-input formControlName="oc" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+  
+          <ion-item lines="full">
+            <ion-label position="floating">ID-SAP</ion-label>
+            <ion-input formControlName="sapID" type="text" aria-label="area  "></ion-input>
+          </ion-item>
+  
+  
+          <ion-item lines="full">
+            <ion-label position="floating">Diagnostico Técnico</ion-label>
+            <ion-textarea formControlName="diagnosticoTecnico"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+  
+          <ion-item lines="full">
+            <ion-label position="floating">Motivo Daño</ion-label>
+            <ion-textarea formControlName="motivoDanio"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+  
+        </section>
+        <!-- ----Baja -->
+
+
+         <!-- MTT P&C -->
+        <section *ngIf="tipoReporte == 'Mantenimiento Correctivo' || tipoReporte == 'Mantenimiento Preventivo'" >
+
+          <ion-item lines="full">
+            <ion-label position="floating">Técnico Especialista</ion-label>
+            <ion-input formControlName="tecEsp" type="text" aria-label="area"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Ubicación</ion-label>
+            <ion-input formControlName="ubicacion" type="text" aria-label="area"></ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Diagnóstico del equipo al llegar técnico</ion-label>
+            <ion-textarea formControlName="diagnosticoTecnico"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+
+
+          <ion-item lines="full">
+            <ion-label position="floating">fallas detectadas durante el servicio</ion-label>
+            <ion-textarea formControlName="fallaDetectadaDuraSer"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-label position="floating">Comentario a la entrega del equipo</ion-label>
+            <ion-textarea formControlName="comentariosEntregaEquip"  autoGrow="true" [counter]="true"
+            ></ion-textarea>
+          </ion-item>
+
+
+        </section>        
+         <!-- MTT P&C -->
+
+        <ion-item lines="full" *ngIf="tipoReporte == 'Recorrido' || !tipoReporte" >
           <ion-label position="floating">Observación</ion-label>
           <ion-textarea formControlName="observacion"  autoGrow="true" [counter]="true"
           ></ion-textarea>
           <ion-button *ngIf="ionicForm.value['observacion']"  expand="block" (click)="verificarTexto()">Verificar Texto</ion-button>
-
         </ion-item>
 
-        <ion-item lines="full">
+        <ion-item lines="full" *ngIf="tipoReporte == 'Recorrido' || !tipoReporte" >
           <ion-select
             aria-label="Criticidad"
             placeholder="Selecciona criticidad"
             (ionChange)="handleChange($event)"
             formControlName="criticidad"
           >
-            <ion-select-option   *ngFor="let hotel of criticidad" value="{{hotel}}" >{{ hotel.nombre }}</ion-select-option>
+          <ion-select-option *ngFor="let hotel of criticidad" [value]="hotel.id">{{ hotel.nombre }}</ion-select-option>
+
           </ion-select>
       </ion-item>
   

@@ -15,10 +15,10 @@
   <section *ngIf="informacionObs">
     <ion-card>
       <ion-card-header>
-        <ion-card-title
-          >Criticidad: {{ informacionObs["criticidad"] }}</ion-card-title
-        >
-        <!-- <ion-card-subtitle>{{data.fechaRegistro | date}} -  </ion-card-subtitle> -->
+        <ion-card-title *ngIf="informacionObs['tipoReporte'] == 'Recorrido'" >Criticidad: {{ informacionObs["criticidad"] }}</ion-card-title>
+        <ion-card-title *ngIf="informacionObs['tipoReporte'] != 'Recorrido'" >{{informacionObs['tipoReporte']}}</ion-card-title>
+
+        <ion-card-subtitle *ngIf="informacionObs['tipoReporte'] == 'Recorrido'">{{informacionObs['tipoReporte']}}</ion-card-subtitle>
       </ion-card-header>
 
 
@@ -27,6 +27,15 @@
         {{ informacionObs["fechaRegistro"] | date }}
       </ion-card-content>
     </ion-card>
+    <ion-button expand="block" (click)="updateForm()"*ngIf=" 
+    [informacionObs['tipoReporte'] === 'Mantenimiento Correctivo' || 
+    informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'] && 
+    informacionObs['diagnosticoTecnico'] && 
+    informacionObs['fallaDetectadaDuraSer'] && 
+    informacionObs['comentariosEntregaEquip'] && 
+    !informacionObs['fechaFinaliza']
+    
+    " >Finalizar</ion-button>
 
     <div class="ion-padding" slot="content">
       <ion-card>
@@ -36,7 +45,7 @@
 
         <ion-card-header>
           <ion-item>
-            <ion-card-title >Información </ion-card-title>
+            <ion-card-title >{{informacionObs.identificador}} .- Información </ion-card-title>
             <ion-button fill="outline" slot="end" (click)="openEdit()">
               <ion-icon name="create-outline"></ion-icon>
             </ion-button>
@@ -86,11 +95,100 @@
               <p>{{ informacionObs.criticidad }}</p>
             </ion-label>
           </ion-item>
+
+          <!-- ///Baja -->
+
+          <ion-item *ngIf="informacionObs.adquisicionEquipo">
+            <ion-label>
+              <h3>Adquisición del equipo</h3>
+              <p>{{ informacionObs.adquisicionEquipo }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.ubicacion">
+            <ion-label>
+              <h3>Ubicación</h3>
+              <p>{{ informacionObs.ubicacion }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.oc">
+            <ion-label>
+              <h3>OC</h3>
+              <p>{{ informacionObs.oc }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.sapID">
+            <ion-label>
+              <h3>ID-SAP</h3>
+              <p>{{ informacionObs.sapID }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.diagnosticoTecnico">
+            <ion-label>
+              <h3>Diagnóstico Técnico</h3>
+              <p style="white-space: normal !important;">{{ informacionObs.diagnosticoTecnico }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.motivoDanio">
+            <ion-label>
+              <h3>Motivo Daño</h3>
+              <p style="white-space: normal;"> {{ informacionObs.motivoDanio }}</p>
+            </ion-label>
+          </ion-item>
+
+          <!-- ///----baja   -->
+
+          <!-- /// MTT p&c -->
+          <ion-item *ngIf="informacionObs.tecEsp">
+            <ion-label>
+              <h3>Técnico Especialista</h3>
+              <p>{{ informacionObs.tecEsp }}</p>
+            </ion-label>
+          </ion-item>
+
+
+          <ion-item *ngIf="informacionObs.fallaDetectadaDuraSer">
+            <ion-label>
+              <h3>Fallas detectadas durante el servicio</h3>
+              <p style="white-space: normal;">{{ informacionObs.fallaDetectadaDuraSer }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.comentariosEntregaEquip">
+            <ion-label>
+              <h3>Comentario a la entrega del equipo</h3>
+              <p style="white-space: normal;">{{ informacionObs.comentariosEntregaEquip }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.fechaInicio && informacionObs['tipoReporte'] === 'Mantenimiento Correctivo' || 
+          informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'">
+            <ion-label>
+              <h3>Fecha Inicia</h3>
+              <p style="white-space: normal;">{{ informacionObs.fechaInicio }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="informacionObs.fechaFinaliza && informacionObs['tipoReporte'] === 'Mantenimiento Correctivo' || 
+          informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'">
+            <ion-label>
+              <h3>Fecha Finaliza</h3>
+              <p style="white-space: normal;">{{ informacionObs.fechaFinaliza }}</p>
+            </ion-label>
+          </ion-item>
+          <!-- /// MTT p&c -->
+
         </section>
 
-        <ion-card-content>
+        <ion-card-content *ngIf="informacionObs.observacion " >
           {{ informacionObs.observacion }}
         </ion-card-content>
+
+
       </ion-card>
     </div>
 
@@ -188,7 +286,7 @@
             <ion-row>
               <ion-col>
                 <div class="ion-text-center">
-                  <h3>No hay comentarios que mostrar</h3>
+                  <h3>No hay recomendación que mostrar</h3>
                 </div>
               </ion-col>
             </ion-row>

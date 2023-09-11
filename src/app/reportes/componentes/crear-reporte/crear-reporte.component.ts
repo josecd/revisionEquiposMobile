@@ -11,6 +11,24 @@ import { Storage } from '@ionic/storage';
 })
 export class CrearReporteComponent  implements OnInit {
 
+  tipoReporte=[
+    {
+      id:'Recorrido',
+      nombre:'Recorrido'
+    },
+    {
+      id:'Baja',
+      nombre:'Baja'
+    },
+    {
+      id:'Mantenimiento Correctivo',
+      nombre:'Mantenimiento Correctivo'
+    },
+    {
+      id:'Mantenimiento Preventivo',
+      nombre:'Mantenimiento Preventivo'
+    }
+  ]
   @Input("idReporte") idReporte:any;
   // form : crearObservacionDto;
 
@@ -41,6 +59,7 @@ export class CrearReporteComponent  implements OnInit {
     this.ionicForm = this.formBuilder.group({
       descripcion: ['',[Validators.required, ]],
       hotelId: ['',[Validators.required ]],
+      tipoReporte: ['',[Validators.required ]],
       userId:[''],
     });
 
@@ -73,13 +92,11 @@ export class CrearReporteComponent  implements OnInit {
     
     this._reporte.crearReporte(this.ionicForm.value).subscribe({
       next: (data:any) => {
-        console.log(data);
-        
         loading.dismiss();
         this.modalCtrl.dismiss(true, "msg");
       },
       error: async (err)=>{
-        loading.dismiss();
+        // loading.dismiss();
 
         const alert = await this.alertController.create({
           header: 'Alerta',
