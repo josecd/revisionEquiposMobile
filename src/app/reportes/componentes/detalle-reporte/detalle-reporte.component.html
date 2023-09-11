@@ -22,14 +22,15 @@
   </ion-refresher>
 
 
-  <section *ngIf="reporte">
+  
+  <section >
 
     <ion-card>
       <ion-card-header>
         <ion-card-title>{{reporte['hoteles'][0]['nombre']}}</ion-card-title>
-        <!-- <ion-card-subtitle>{{data.fechaRegistro | date}} -  </ion-card-subtitle> -->
+        <ion-card-subtitle>{{reporte['tipoReporte']}}</ion-card-subtitle>
       </ion-card-header>
-
+ 
       <ion-card-content>
         {{reporte['fechaRegistro'] | date}}
       </ion-card-content>
@@ -53,7 +54,7 @@
             <ion-card-header>
               <ion-item>
                 <!-- <ion-label>Observacion del reporte </ion-label> -->
-                <ion-card-title >Observación </ion-card-title>
+                <ion-card-title >{{data.identificador}} .- Observación </ion-card-title>
                 <ion-button fill="outline" slot="end" (click)="agregarFoto(data)">
                   <ion-icon name="eye-outline"></ion-icon>
                 </ion-button>
@@ -108,6 +109,88 @@
                 </ion-label>
               </ion-item>
 
+          <!-- ///Baja -->
+
+          <ion-item *ngIf="data.adquisicionEquipo">
+            <ion-label>
+              <h3>Adquisición del equipo</h3>
+              <p>{{ data.adquisicionEquipo }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.ubicacion">
+            <ion-label>
+              <h3>Ubicación</h3>
+              <p>{{ data.ubicacion }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.oc">
+            <ion-label>
+              <h3>OC</h3>
+              <p>{{ data.oc }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.sapID">
+            <ion-label>
+              <h3>ID-SAP</h3>
+              <p>{{ data.sapID }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.diagnosticoTecnico">
+            <ion-label>
+              <h3>Diagnóstico Técnico</h3>
+              <p style="white-space: normal;">{{ data.diagnosticoTecnico }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.motivoDanio">
+            <ion-label>
+              <h3>Motivo Daño</h3>
+              <p style="white-space: normal;">{{ data.motivoDanio }}</p>
+            </ion-label>
+          </ion-item>
+
+          <!-- ///----baja   -->
+
+          <!-- /// MTT p&c -->
+          <ion-item *ngIf="data.tecEsp">
+            <ion-label>
+              <h3>Técnico Especialista</h3>
+              <p>{{ data.tecEsp }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.fallaDetectadaDuraSer">
+            <ion-label>
+              <h3>Fallas detectadas durante el servicio</h3>
+              <p style="white-space: normal;">{{ data.fallaDetectadaDuraSer }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.comentariosEntregaEquip">
+            <ion-label>
+              <h3>Comentario a la entrega del equipo</h3>
+              <p style="white-space: normal;">{{ data.comentariosEntregaEquip }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.fechaInicio ">
+            <ion-label>
+              <h3>Fecha Inicia</h3>
+              <p style="white-space: normal;">{{ data.fechaInicio }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item *ngIf="data.fechaFinaliza ">
+            <ion-label>
+              <h3>Fecha Finaliza</h3>
+              <p style="white-space: normal;">{{ data.fechaFinaliza }}</p>
+            </ion-label>
+          </ion-item>
+          <!-- /// MTT p&c -->
 
             </section>
 
@@ -212,8 +295,8 @@
         <!-- <ion-card-subtitle>{{reporte.fechaRegistro | date}} </ion-card-subtitle> -->
       </ion-card-header>
 
-      <ion-card-content>
-        {{reporte.recomendaciones || 'No tiene recomendaciones'}}
+      <ion-card-content style="text-align: center;">
+        {{reporte.recomendaciones || 'No Tiene Comentario De Gerencia'}}
       </ion-card-content>
     </ion-card>
 
@@ -257,9 +340,6 @@
   
   </section>
 
-
-
-  
 
 
 </ion-content>

@@ -7,6 +7,7 @@ import { Storage } from '@ionic/storage';
 import Swiper from 'swiper';
 import { ImageModalPage } from 'src/app/shared/image-modal/image-modal.page';
 import { CrearObservacionComponent } from '../crear-observacion/crear-observacion.component';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-detalle-observacion',
@@ -47,12 +48,41 @@ export class DetalleObservacionComponent implements OnInit {
   }
 
 
+  async updateForm(){
+    const loading = await this.loadingCtrl.create({
+      message: 'Subiendo información...',
+    });
+    loading.present();
+    const format1 = "YYYY-MM-DD HH:mm"
+    var date1 = new Date();
+    this._reporte.updateObservacionReporte({fechaFinaliza:moment(date1).format(format1)},this.idObservacion).subscribe({
+      next: (data:any) => {
+        console.log(data);
+        
+        loading.dismiss();
+        this.modalCtrl.dismiss(true, "msg");
+      },
+      error: async (err)=>{
+        loading.dismiss();
+
+        const alert = await this.alertController.create({
+          header: 'Alerta',
+          subHeader: 'Intente más tarde',
+          message: 'Ha ocurrido un error',
+          buttons: ['OK'],
+        });
+        await alert.present();
+      },
+    });
+  }
+
   load() {
     this.informacionObs = null;
     this._reporte.getObservacion(this.idObservacion).subscribe(
       {
         next: (res) => {
           this.informacionObs = res;
+          console.log(res);
           
         },
         error: (err) => {
@@ -201,7 +231,7 @@ export class DetalleObservacionComponent implements OnInit {
     async openEdit(){
       const modal = await this.modalCtrl.create({
         component: CrearObservacionComponent,
-        componentProps: { idReporte:  this.informacionObs.reporteId , editM:true , data:this.informacionObs }
+        componentProps: { idReporte:  this.informacionObs.reporteId , editM:true , data:this.informacionObs,tipoReporte:this.informacionObs['tipoReporte']}
       });
       modal.present();
       const { data, role } = await modal.onWillDismiss();

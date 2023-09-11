@@ -4,6 +4,7 @@ import { AlertController, LoadingController, ModalController } from '@ionic/angu
 import { ReportesService } from '../../services/reportes.service';
 
 import { Storage } from '@ionic/storage';
+import * as moment from 'moment-timezone';
 
 @Component({
   selector: 'app-crear-observacion',
@@ -12,6 +13,8 @@ import { Storage } from '@ionic/storage';
 })
 export class CrearObservacionComponent  implements OnInit {
   @Input("editM") editM:any;
+  @Input("tipoReporte") tipoReporte:any;
+
   @Input("idReporte") idReporte:any;
   @Input("data") data:any;
 
@@ -46,12 +49,12 @@ export class CrearObservacionComponent  implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(this.editM);
-    
     this.edit= this.editM;
-
+    console.log(this.data);
+  
     if (this.editM) {
-      
+    
+
       this.ionicForm = this.formBuilder.group({
         equipo: [this.data?.equipo],
         marca: [this.data?.marca],
@@ -61,11 +64,25 @@ export class CrearObservacionComponent  implements OnInit {
         observacion: [this.data?.observacion],
         reporteId:[this.idReporte],
         userId:[this.data?.userId],
-        criticidad:['']
+        criticidad:[''],
+        //Baja
+        adquisicionEquipo:[this.data?.adquisicionEquipo],
+        ubicacion:[this.data?.ubicacion], //igual sirve para MP&MC
+        oc:[this.data?.oc],
+        sapID:[this.data?.sapID],
+        diagnosticoTecnico:[this.data?.diagnosticoTecnico],//igual sirve para MP&MC
+        motivoDanio:[this.data?.motivoDanio],
+        //matenimiento P&C
+        tecEsp:[this.data?.tecEsp],
+        fechaFinaliza:[this.data?.fechaFinaliza],
+        fallaDetectadaDuraSer:[this.data?.fallaDetectadaDuraSer],
+        comentariosEntregaEquip:[this.data?.comentariosEntregaEquip]
       });
       const data = this.data?.criticidad
       this.ionicForm.get('criticidad')?.setValue(data)
     }else{
+      const format1 = "YYYY-MM-DD HH:mm"
+      var date1 = new Date();
       this.ionicForm = this.formBuilder.group({
         equipo: ['',],
         marca: [''],
@@ -75,7 +92,20 @@ export class CrearObservacionComponent  implements OnInit {
         observacion: ['',],
         reporteId:[this.idReporte],
         userId:[''],
-        criticidad:['']
+        criticidad:[''],
+        //Baja
+        adquisicionEquipo:[''],
+        ubicacion:[''], //igual sirve para MP&MC
+        oc:[''],
+        sapID:[''],
+        diagnosticoTecnico:[''],//igual sirve para MP&MC
+        motivoDanio:[''],
+        //matenimiento P&C
+        tecEsp:[''],
+        fechaInicio:this.tipoReporte == 'Mantenimiento Correctivo' || this.tipoReporte == 'Mantenimiento Preventivo'? [ moment(date1).format(format1)]:[ ''],
+        fechaFinaliza:[''],
+        fallaDetectadaDuraSer:[''],
+        comentariosEntregaEquip:['']
       });
 
     }
@@ -88,7 +118,7 @@ export class CrearObservacionComponent  implements OnInit {
   
   async submitForm(){
     
-    if (!this.ionicForm.value['criticidad']) {
+    if (!this.ionicForm.value['criticidad'] && this.tipoReporte == 'Recorrido') {
       const alert = await this.alertController.create({
         header: 'Alerta',
         subHeader: 'Tiene que agregar criticidad para poder guardar',
@@ -127,7 +157,8 @@ export class CrearObservacionComponent  implements OnInit {
       message: 'Subiendo información...',
     });
     loading.present();
-
+    console.log(this.ionicForm.value);
+    
     this._reporte.updateObservacionReporte(this.ionicForm.value,this.data.idObservacion).subscribe({
       next: (data:any) => {
         loading.dismiss();

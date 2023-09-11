@@ -36,9 +36,9 @@ export class DetalleReporteComponent implements OnInit {
   loading: boolean = true;
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-  recomendacion:any;
+  recomendacion: any;
 
-  usuario:any;
+  usuario: any;
   constructor(
     public modalCtrl: ModalController,
     private _reportes: ReportesService,
@@ -53,7 +53,7 @@ export class DetalleReporteComponent implements OnInit {
     this.getReporte();
     //idreporte
     // this.data['idReporte'].toString()
-   this._auth.user$
+    this._auth.user$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((user) => {
         this.usuario = user;
@@ -95,7 +95,7 @@ export class DetalleReporteComponent implements OnInit {
   async agregarFoto(dataInfo: any) {
     const modal = await this.modalCtrl.create({
       component: DetalleObservacionComponent,
-      componentProps: { idObservacion: dataInfo['idObservacion'] ,editable:this.editable}
+      componentProps: { idObservacion: dataInfo['idObservacion'], editable: this.editable }
     })
     modal.present();
     const { data, role } = await modal.onWillDismiss();
@@ -133,7 +133,7 @@ export class DetalleReporteComponent implements OnInit {
 
     const modal = await this.modalCtrl.create({
       component: CrearObservacionComponent,
-      componentProps: { idReporte: this.data['idReporte'].toString(), editM:false }
+      componentProps: { idReporte: this.data['idReporte'].toString(), editM: false, tipoReporte: this.data['tipoReporte'] }
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
@@ -225,11 +225,24 @@ export class DetalleReporteComponent implements OnInit {
   }
 
   async exportPDf() {
-    await Browser.open({ url: environment.API_URL +'/reportes/pdf/view/' + this.data['idReporte'].toString() });
+    if (this.data['tipoReporte'] === 'Recorrido' || !this.data['tipoReporte'] ) {
+      await Browser.open({ url: environment.API_URL + '/reportes/pdf/view/' + this.data['idReporte'].toString() });
+
+    } else if (this.data['tipoReporte'] === 'Baja') {
+      await Browser.open({ url: environment.API_URL + '/reportes/pdf/view/' + this.data['idReporte'].toString() + "/Baja" });
+
+    } else if (this.data['tipoReporte'] === 'Mantenimiento Correctivo') {
+      await Browser.open({ url: environment.API_URL + '/reportes/pdf/view/' + this.data['idReporte'].toString() + "/Mantenimiento" });
+
+    } else if (this.data['tipoReporte'] === 'Mantenimiento Preventivo') {
+      await Browser.open({ url: environment.API_URL + '/reportes/pdf/view/' + this.data['idReporte'].toString() + "/Mantenimiento" });
+
+    }
+
   }
 
   async exportPDf2() {
-    await Browser.open({ url: environment.API_URL +`/reportes/${this.data['idReporte'].toString()}/pdfReporte`});
+    await Browser.open({ url: environment.API_URL + `/reportes/${this.data['idReporte'].toString()}/pdfReporte` });
   }
 
   async openPreview(img: any) {
@@ -275,7 +288,7 @@ export class DetalleReporteComponent implements OnInit {
     this.swiper?.slideNext();
   }
 
-  openmodal(){
+  openmodal() {
 
   }
 
@@ -298,16 +311,16 @@ export class DetalleReporteComponent implements OnInit {
         message: 'Guardando información...',
       });
       loading.present();
-  
+
       const data = {
         "recomendaciones": ev.detail.data,
       }
-      this._reportes.editarRecomendacion(this.data['idReporte'].toString(),data).subscribe({
-        next:(value)=> {
+      this._reportes.editarRecomendacion(this.data['idReporte'].toString(), data).subscribe({
+        next: (value) => {
           loading.dismiss();
           this.getReporte()
         },
-         error:async (err)=> {
+        error: async (err) => {
           loading.dismiss();
           const alert = await this.alertController.create({
             header: 'Alerta',
@@ -323,45 +336,45 @@ export class DetalleReporteComponent implements OnInit {
     }
   }
 
-  async verificarTexto(){
-      const loading2 = await this.loadingCtrl.create({
-        message: 'Consultando información...',
+  async verificarTexto() {
+    const loading2 = await this.loadingCtrl.create({
+      message: 'Consultando información...',
+    });
+    loading2.present();
+    console.log(this.recomendacion);
+    const datos = {
+      "text": this.recomendacion
+    }
+    this._reportes.textoCorreccionIA(datos).subscribe(async (res: any) => {
+      loading2.dismiss();
+
+      const alert = await this.alertController.create({
+        header: "Texto Modificado",
+        message: res['response'],
+        buttons: [
+          {
+            text: "Cancelar",
+            role: "cancel",
+            handler: () => {
+              console.log("Declined the offer");
+            },
+          },
+          {
+            text: "Aceptar",
+            handler: async () => {
+              // const loading = await this.loadingCtrl.create({
+              //   message: 'Borrando imagen...',
+              // });
+              // loading.present();
+              this.recomendacion = res['response']
+            },
+          },
+        ],
       });
-      loading2.present();
-      console.log(this.recomendacion);
-        const datos={
-          "text":this.recomendacion
-        }
-      this._reportes.textoCorreccionIA(datos).subscribe(async (res:any)=>{
-        loading2.dismiss();          
-        
-        const alert = await this.alertController.create({
-          header: "Texto Modificado",
-          message: res['response'],
-          buttons: [
-            {
-              text: "Cancelar",
-              role: "cancel",
-              handler: () => {
-                console.log("Declined the offer");
-              },
-            },
-            {
-              text: "Aceptar",
-              handler: async () => {
-                // const loading = await this.loadingCtrl.create({
-                //   message: 'Borrando imagen...',
-                // });
-                // loading.present();
-                this.recomendacion = res['response']
-              },
-            },
-          ],
-        });
-    
-        await alert.present();
-        
-      })
+
+      await alert.present();
+
+    })
 
   }
 }
