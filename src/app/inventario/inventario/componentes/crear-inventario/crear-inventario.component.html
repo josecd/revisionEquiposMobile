@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-buttons>
+    <ion-title>Inventario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form [formGroup]="ionicForm">
+
+    <ion-item lines="full">
+      <ion-label position="floating">Marca</ion-label>
+      <ion-input formControlName="marca" type="text" aria-label="marca"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Equipo</ion-label>
+      <ion-input formControlName="equipo" type="text" aria-label="equipo"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-select aria-label="Hoteles" placeholder="Selecciona Hotel" formControlName="hotelId"
+        (ionChange)="handleChange($event)">
+        <ion-select-option *ngFor="let hotel of hoteles" [value]="hotel.idHotel">{{ hotel.nombre }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-row>
+      <ion-col>
+        <ion-button [disabled]="!ionicForm.valid" type="submit" color="danger" expand="block"
+          (click)="submitForm()">Guardar</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+
+</ion-content>
+
+
+
+
+\
+
+<!-- <ion-footer>
+
+  <ion-button expand="block" >
+    <ion-icon name="image" slot="start"></ion-icon>
+    <ion-label>Guardar</ion-label>
+  </ion-button>
+
+</ion-footer> -->

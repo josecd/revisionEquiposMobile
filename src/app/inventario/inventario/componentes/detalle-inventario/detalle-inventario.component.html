@@ -1,0 +1,157 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-buttons>
+    <ion-title *ngIf="inveDetalle">{{inveDetalle.hoteles?.nombre}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="inveDetalle">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-item *ngIf="loading">
+      <ion-spinner name="lines-sharp"></ion-spinner>
+    </ion-item>
+
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+
+
+  <section>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Marca: {{inveDetalle['marca']}}</ion-card-title>
+        <ion-card-subtitle>Equipo: {{inveDetalle['equipo']}}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        {{inveDetalle['fechaRegistro'] | date}}
+      </ion-card-content>
+    </ion-card>
+
+
+    <ion-item slot="header" color="light">
+      <ion-label>Partes Inventario</ion-label>
+    </ion-item>
+
+    <div slot="content" *ngIf="inveDetalle['partes'].length > 0">
+
+      <ion-card *ngFor="let data of inveDetalle['partes']">
+
+        <section>
+
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item *ngIf="data.descripcion">
+                  <ion-label>
+                    <h3>Descripción</h3>
+                    <p>{{data.descripcion}}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+
+
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item *ngIf="data.noParte">
+                  <ion-label>
+                    <h3>No.Parte</h3>
+                    <p>{{data.noParte}}</p>
+                  </ion-label>
+                </ion-item></ion-col>
+              <ion-col> <ion-item *ngIf="data.cantidad">
+                  <ion-label>
+                    <h3>Cantidad</h3>
+                    <p>{{data.cantidad}}</p>
+                  </ion-label>
+                </ion-item></ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </section>
+
+
+        <ion-card-content>
+          {{data.observacion}}
+        </ion-card-content>
+
+        <!-- ///iamges slide -->
+        <section *ngIf="data['partesImagen'].length > 0" >
+          <swiper-container class="mySwiper" zoom="true" navigation="true" rewind="true">
+            <swiper-slide *ngFor="let item of data['partesImagen']">
+              <div class="swiper-zoom-container" style="text-align: center;">
+  
+                <img style="text-align: center;" [src]="item['url']" />
+                <ion-item>
+                  <ion-label>{{item.fechaRegistro | date}}</ion-label>
+                  <ion-button fill="outline" slot="end" (click)="deleteImg(item)" *ngIf="editable">x</ion-button>
+                  <ion-button fill="outline" slot="end" (click)="openPreview(item['url'])"> <ion-icon
+                      name="eye-outline"></ion-icon>
+                  </ion-button>
+                </ion-item>
+              </div>
+            </swiper-slide>
+          </swiper-container>
+        </section>
+        <section *ngIf="data['partesImagen'].length == 0"  >
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <div class="ion-text-center">
+                  <h3>No tiene imagen</h3>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </section>
+
+      </ion-card>
+    </div>
+
+    <div class="ion-padding" slot="content" *ngIf="inveDetalle['partes'].length == 0">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <div class="ion-text-center">
+              <h3>No hay partes de inventario que mostrar</h3>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+  </section>
+
+</ion-content>
+
+
+
+
+<ion-content [fullscreen]="true" *ngIf="!inveDetalle">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>No hay información</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="chevron-up-circle"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button (click)="openImg()">
+      <ion-icon name="camera-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>

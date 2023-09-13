@@ -13,7 +13,9 @@ import { App } from '@capacitor/app';
 export class AppComponent {
   public appPages = [
     { title: 'Reportes', url: 'reportes', icon: 'mail' },
+    { title: 'Inventario', url: 'inventario', icon: 'document' },
     { title: 'Perfil', url: 'usuarios', icon: 'paper-plane' },
+
     // { title: 'Hoteles', url: 'hoteles', icon: 'heart' },
     // { title: 'Trabajadores', url: 'trabajadores', icon: 'archive' },
   ];

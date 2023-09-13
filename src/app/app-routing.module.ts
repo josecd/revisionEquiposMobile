@@ -53,7 +53,11 @@ const routes: Routes = [
   {
     path: 'image-modal',
     loadChildren: () => import('./shared/image-modal/image-modal.module').then( m => m.ImageModalPageModule)
+  },  {
+    path: 'inventario',
+    loadChildren: () => import('./inventario/inventario/inventario.module').then( m => m.InventarioPageModule)
   },
+
 
 
 
