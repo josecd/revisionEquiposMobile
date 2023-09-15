@@ -111,8 +111,8 @@ export class CrearParteComponent implements OnInit {
     }
 
     const image: any = await Camera.getPhoto({
-      quality: 100,
-      width: 400,
+      // quality: 100,
+      // width: 400,
       saveToGallery: true,
       allowEditing: false,
       resultType: CameraResultType.DataUrl,
