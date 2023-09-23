@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { InventarioService } from 'src/app/inventario/services/inventario.service';
 import { CrearParteComponent } from '../crear-parte/crear-parte.component';
 import { ImageModalPage } from 'src/app/shared/image-modal/image-modal.page';
+import { EditarParteComponent } from '../editar-parte/editar-parte.component';
 
 @Component({
   selector: 'app-detalle-inventario',
@@ -20,17 +21,13 @@ export class DetalleInventarioComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
-
     this.getInventario()
   }
 
   getInventario() {
     this._inventario.getInventarioID(this.data['idInventario']).subscribe({
       next: async (data: any) => {
-
         this.inveDetalle = data;
-        console.log(data);
       },
       error(err) {
         console.log(err);
@@ -44,7 +41,6 @@ export class DetalleInventarioComponent implements OnInit {
     this._inventario.getInventarioID(this.data['idInventario']).subscribe({
       next: async (data: any) => {
         this.inveDetalle = data;
-        console.log(data);
       },
       error(err) {
         console.log(err);
@@ -85,6 +81,24 @@ export class DetalleInventarioComponent implements OnInit {
       }
     });
     modal.present();
+  }
+
+  async editarDetalle(datas:any) {
+    const modal = await this.modalCtrl.create({
+      component: EditarParteComponent,
+      componentProps: {
+        'idParte': datas.idParte,
+        "data":datas
+      }
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if (data) {
+      this.getInventario()
+
+    } else {
+      console.log(data);
+    }
   }
 
 }

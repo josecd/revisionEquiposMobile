@@ -1,3 +1,4 @@
+import { EditarParteComponent } from './componentes/editar-parte/editar-parte.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +26,8 @@ import { CrearParteComponent } from './componentes/crear-parte/crear-parte.compo
     InventarioPage,
     DetalleInventarioComponent,
     CrearInventarioComponent,
-    CrearParteComponent
+    CrearParteComponent,
+    EditarParteComponent
   ]
 })
 export class InventarioPageModule {}

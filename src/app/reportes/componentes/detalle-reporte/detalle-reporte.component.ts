@@ -353,7 +353,6 @@ export class DetalleReporteComponent implements OnInit {
       message: 'Consultando información...',
     });
     loading2.present();
-    console.log(this.recomendacion);
     const datos = {
       "text": this.recomendacion
     }

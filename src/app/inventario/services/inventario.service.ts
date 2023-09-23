@@ -31,4 +31,13 @@ export class InventarioService {
     return this._httpClient.post(environment.API_URL + `/parte/imgParte`,data)
   }
 
+
+  //Parte
+  getParteID(id: any) {
+    return this._httpClient.get(environment.API_URL + `/parte/${id}`)
+  }
+
+  patchParte(data:any,id:any){
+    return this._httpClient.patch(environment.API_URL + `/parte/${id}`, data)
+  }
 }

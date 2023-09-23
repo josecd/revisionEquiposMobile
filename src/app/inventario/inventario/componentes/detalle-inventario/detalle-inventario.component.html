@@ -47,7 +47,11 @@
               <ion-col>
                 <ion-item *ngIf="data.descripcion">
                   <ion-label>
-                    <h3>Descripción</h3>
+                    <h3>Descripción 
+                      <ion-icon name="create-outline" style="font-size: 140%;" (click)="editarDetalle(data)"></ion-icon>
+
+                    </h3>
+                    
                     <p>{{data.descripcion}}</p>
                   </ion-label>
                 </ion-item>
