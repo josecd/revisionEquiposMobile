@@ -8,23 +8,35 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-button  expand="block" (click)="getPicture()">
+  <ion-button expand="block" (click)="tomarFoto()">
     <ion-icon name="image" slot="start"></ion-icon>
-    <ion-label>Subir imagenes</ion-label>
+    <ion-label>Tomar foto</ion-label>
   </ion-button>
-  <input type="file" multiple #filePicker (change)="onFileChoose($event)"/>
 
+  <ion-button expand="block" (click)="getPictures()">
+    <ion-icon name="image" slot="start"></ion-icon>
+    <ion-label>Subir imágenes</ion-label>
+  </ion-button>
+  
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Imagenes</ion-card-title>
+      <ion-card-title>Imágenes</ion-card-title>
       <!-- <ion-card-subtitle>Card Subtitle</ion-card-subtitle> -->
     </ion-card-header>
-  
-    <ion-card-content *ngFor="let item of photos">
-      <img [src]="item">
 
-    </ion-card-content>
+
+    <section *ngIf="files.length > 0">
+      <ion-card-content *ngFor="let item of photos">
+        <img [src]="item">
+
+      </ion-card-content>
+
+    </section>
+
+    <section *ngIf="files.length == 0" style="text-align: center;">
+       <h1>No hay imagenes seleccionadas</h1>
+    </section>
   </ion-card>
 
 
@@ -32,10 +44,10 @@
 </ion-content>
 
 <ion-footer *ngIf="files.length > 0">
-      
-      <ion-button  expand="block" (click)="saveImage()">
-        <ion-icon name="image" slot="start"></ion-icon>
-        <ion-label>Guardar</ion-label>
-      </ion-button>
-      
+
+  <ion-button expand="block" (click)="saveImage()">
+    <ion-icon name="image" slot="start"></ion-icon>
+    <ion-label>Guardar</ion-label>
+  </ion-button>
+
 </ion-footer>
