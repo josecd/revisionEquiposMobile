@@ -1,0 +1,50 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-buttons>
+    <ion-title>Partes Inventario</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content  [fullscreen]="true" class="ion-padding">
+  <form [formGroup]="ionicForm" >
+
+    <ion-item lines="full">
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-input formControlName="descripcion" type="text" aria-label="descripcion"></ion-input>
+    </ion-item>
+    
+    <ion-item lines="full">
+      <ion-label position="floating">No. Parte</ion-label>
+      <ion-input formControlName="noParte" type="number" aria-label="noParte"></ion-input>
+    </ion-item>
+
+    <ion-item lines="full">
+      <ion-label position="floating">Cantidad</ion-label>
+      <ion-input formControlName="cantidad" type="number" aria-label="cantidad"></ion-input>
+    </ion-item>
+
+   
+
+    <ion-row>
+      <ion-col>
+        <ion-button  [disabled]="!ionicForm.valid" type="submit" color="danger" expand="block" (click)="submitForm()">Guardar</ion-button>
+      </ion-col>
+    </ion-row>
+  </form>
+</ion-content>
+
+   
+
+
+
+
+
+<!-- <ion-footer>
+
+<ion-button expand="block" >
+  <ion-icon name="image" slot="start"></ion-icon>
+  <ion-label>Guardar</ion-label>
+</ion-button>
+
+</ion-footer> -->
