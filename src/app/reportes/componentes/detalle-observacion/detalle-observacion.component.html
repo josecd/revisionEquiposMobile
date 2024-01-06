@@ -37,6 +37,16 @@
     
     " >Finalizar</ion-button>
 
+<ion-button expand="block" (click)="firmaInicioObservacion()"*ngIf=" 
+[informacionObs['tipoReporte'] === 'Mantenimiento Correctivo' || 
+informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'] && 
+informacionObs['diagnosticoTecnico'] && 
+informacionObs['fallaDetectadaDuraSer'] && 
+informacionObs['comentariosEntregaEquip'] && 
+!informacionObs['fechaFinaliza']
+
+" >Firma inicio</ion-button>
+
     <div class="ion-padding" slot="content">
       <ion-card>
         <!-- <ion-card-header>

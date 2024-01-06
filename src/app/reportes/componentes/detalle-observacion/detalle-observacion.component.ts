@@ -282,4 +282,8 @@ export class DetalleObservacionComponent implements OnInit {
       })
 
   }
+  firmaInicioObservacion(){
+    console.log("Estoy activando firm inicio obs");
+    
+  }
 }
