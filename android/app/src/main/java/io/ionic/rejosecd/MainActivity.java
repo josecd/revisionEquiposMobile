@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package io.ionic.rejosecd;
 
 import com.getcapacitor.BridgeActivity;
 
