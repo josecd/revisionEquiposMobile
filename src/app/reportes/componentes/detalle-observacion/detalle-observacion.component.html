@@ -27,26 +27,33 @@
         {{ informacionObs["fechaRegistro"] | date }}
       </ion-card-content>
     </ion-card>
-    <ion-button expand="block" (click)="updateForm()"*ngIf=" 
-    [informacionObs['tipoReporte'] === 'Mantenimiento Correctivo' || 
-    informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'] && 
+    <section *ngIf="informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'" >
+      <ion-button expand="block" (click)="updateForm()"*ngIf=" 
+      informacionObs['diagnosticoTecnico'] && 
+      informacionObs['fallaDetectadaDuraSer'] && 
+      informacionObs['comentariosEntregaEquip'] && 
+      informacionObs['fimaConformidad'] && 
+      !informacionObs['fechaFinaliza']
+      " >Finalizar</ion-button>
+    </section>
+
+    <section *ngIf="informacionObs['tipoReporte'] == 'Mantenimiento Correctivo'" >
+      <ion-button expand="block" (click)="updateForm()"*ngIf=" 
+      informacionObs['diagnosticoTecnico'] && 
+      informacionObs['fallaDetectadaDuraSer'] && 
+      informacionObs['comentariosEntregaEquip'] && 
+      !informacionObs['fechaFinaliza']
+      " >Finalizar</ion-button>
+    </section>
+    
+    <ion-button expand="block" (click)="firmaInicioObservacion()"*ngIf=" 
+    informacionObs['tipoReporte'] == 'Mantenimiento Preventivo' && 
     informacionObs['diagnosticoTecnico'] && 
     informacionObs['fallaDetectadaDuraSer'] && 
     informacionObs['comentariosEntregaEquip'] && 
-    informacionObs['fimaConformidad'] && 
-    !informacionObs['fechaFinaliza']
-    
-    " >Finalizar</ion-button>
-
-<ion-button expand="block" (click)="firmaInicioObservacion()"*ngIf=" 
-[informacionObs['tipoReporte'] === 'Mantenimiento Correctivo' || 
-informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'] && 
-informacionObs['diagnosticoTecnico'] && 
-informacionObs['fallaDetectadaDuraSer'] && 
-informacionObs['comentariosEntregaEquip'] && 
-!informacionObs['fechaFinaliza']
-
-" >Firma conformidad</ion-button>
+    !informacionObs['fechaFinaliza']&&
+    !informacionObs['fimaConformidad']  
+    " >Firma conformidad</ion-button>
 
     <div class="ion-padding" slot="content">
       <ion-card>
@@ -304,6 +311,41 @@ informacionObs['comentariosEntregaEquip'] &&
           </ion-grid>
         </div>
       </ion-accordion>
+
+      <ion-accordion value="tres" *ngIf="informacionObs['tipoReporte'] == 'Mantenimiento Preventivo'" >
+        <ion-item slot="header" color="light">
+          <ion-label>Firma Conformidad</ion-label>
+        </ion-item>
+
+        <div slot="content" *ngIf="informacionObs['firmasObs'].length > 0">
+          <ion-card style="text-align: center;" *ngFor="let data of informacionObs['firmasObs']">
+            <img alt="img" style="    filter: brightness(1.1);
+            mix-blend-mode:multiply" [src]="data['url']" (click)="deleteFirma(data)" />
+            <ion-card-header>
+              <ion-card-title>{{data.tipo}}</ion-card-title>
+              <ion-card-subtitle>{{data.fechaRegistro | date}} </ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              {{data.nombreFirma}}
+            </ion-card-content>
+
+          </ion-card>
+        </div>
+
+        <div class="ion-padding" slot="content" *ngIf="informacionObs['firmasObs'].length == 0">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <div class="ion-text-center">
+                  <h3>No hay firmas que mostrar</h3>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+
+      </ion-accordion>
+
     </ion-accordion-group>
 
     <ion-content class="ion-padding">

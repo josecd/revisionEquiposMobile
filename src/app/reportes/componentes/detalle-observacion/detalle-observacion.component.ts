@@ -8,6 +8,8 @@ import Swiper from 'swiper';
 import { ImageModalPage } from 'src/app/shared/image-modal/image-modal.page';
 import { CrearObservacionComponent } from '../crear-observacion/crear-observacion.component';
 import * as moment from 'moment-timezone';
+import { SignatureObsComponent } from 'src/app/shared/signature/signatureObs/signature.component';
+import { UsuarioService } from 'src/app/usuarios/usuario.service';
 
 @Component({
   selector: 'app-detalle-observacion',
@@ -36,7 +38,7 @@ export class DetalleObservacionComponent implements OnInit {
     private alertController: AlertController,
     private loadingCtrl: LoadingController,
     private storage: Storage,
-
+    private _usuario: UsuarioService,
   ) { }
 
   async ngOnInit() {
@@ -282,8 +284,24 @@ export class DetalleObservacionComponent implements OnInit {
       })
 
   }
-  firmaInicioObservacion(){
-    console.log("Estoy activando firm inicio obs");
-    
+ async firmaInicioObservacion(){
+  const modal = await this.modalCtrl.create({
+      component: SignatureObsComponent,
+      componentProps: { idObs: this.idObservacion.toString() }
+    });
+    modal.present();
+    const { data, role } = await modal.onWillDismiss();
+    if (data) {
+      let formData = new FormData();
+      formData.append('obsId', this.idObservacion.toString());
+      formData.append('file', data.img);
+      formData.append('tipo', data.type);
+      formData.append('nombreFirma', data.nombreFirma);
+      this._usuario.enviarFirmaObs(formData).subscribe(res => {
+        this.load()
+      })
+    } else {
+    }
+
   }
 }

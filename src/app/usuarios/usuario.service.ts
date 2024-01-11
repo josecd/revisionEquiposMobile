@@ -13,6 +13,10 @@ export class UsuarioService {
     return this._httpClient.post(environment.API_URL + "/reportes/firma", firma);
   }
 
+  enviarFirmaObs(firma: any) {
+    return this._httpClient.post(environment.API_URL + "/reportes/obs/firma", firma);
+  }
+
   enviarFirmaPerfil(id: any, firma: any) {
     return this._httpClient.post(environment.API_URL + `/users/${id}/createFirma`, firma);
   }
