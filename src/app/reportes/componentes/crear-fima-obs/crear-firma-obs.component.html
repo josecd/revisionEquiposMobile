@@ -1,0 +1,68 @@
+<ion-card>
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-buttons>
+      <ion-title>Reporte</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card-content>
+
+      <form [formGroup]="ionicForm" >
+
+        <ion-item lines="full" *ngIf="false" >
+          <ion-label position="floating">recomendacion</ion-label>
+          <ion-input formControlName="recomendaciones" type="text" aria-label="equipo"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-input formControlName="descripcion" type="text" aria-label="equipo"></ion-input>
+        </ion-item>
+
+        <ion-item lines="full">
+            <ion-select
+              aria-label="Hoteles"
+              placeholder="Selecciona Hotel"
+              formControlName="hotelId" 
+              (ionChange)="handleChange($event)"
+            >
+              <ion-select-option *ngFor="let hotel of hoteles" [value]="hotel.idHotel">{{ hotel.nombre }}</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+
+        <ion-item lines="full">
+          <ion-select
+            aria-label="Tipo Reporte"
+            placeholder="Tipo Reporte"
+            formControlName="tipoReporte" 
+          >
+            <ion-select-option  [interfaceOptions]="{cssClass: 'my-class'}" *ngFor="let tipo of tipoReporte" [value]="tipo.id">{{ tipo.nombre }}</ion-select-option>
+          </ion-select>
+      </ion-item>
+
+
+        <ion-row>
+          <ion-col>
+            <ion-button  [disabled]="!ionicForm.valid" type="submit" color="danger" expand="block" (click)="submitForm()">Guardar</ion-button>
+          </ion-col>
+        </ion-row>
+      </form>
+
+
+
+
+  </ion-card-content>
+</ion-card>
+
+<!-- <ion-footer>
+
+  <ion-button expand="block" >
+    <ion-icon name="image" slot="start"></ion-icon>
+    <ion-label>Guardar</ion-label>
+  </ion-button>
+
+</ion-footer> -->

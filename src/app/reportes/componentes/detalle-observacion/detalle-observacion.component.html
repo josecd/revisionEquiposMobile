@@ -33,6 +33,7 @@
     informacionObs['diagnosticoTecnico'] && 
     informacionObs['fallaDetectadaDuraSer'] && 
     informacionObs['comentariosEntregaEquip'] && 
+    informacionObs['fimaConformidad'] && 
     !informacionObs['fechaFinaliza']
     
     " >Finalizar</ion-button>
@@ -45,7 +46,7 @@ informacionObs['fallaDetectadaDuraSer'] &&
 informacionObs['comentariosEntregaEquip'] && 
 !informacionObs['fechaFinaliza']
 
-" >Firma inicio</ion-button>
+" >Firma conformidad</ion-button>
 
     <div class="ion-padding" slot="content">
       <ion-card>
@@ -366,5 +367,9 @@ informacionObs['comentariosEntregaEquip'] &&
     <ion-fab-button (click)="agregarImagen()" *ngIf="editable">
       <ion-icon name="camera-outline"></ion-icon>
     </ion-fab-button>
+    <!-- agregar firma inicio -->
+    <!-- <ion-fab-button (click)="firmaInicioObservacion()">
+      <ion-icon name="pencil-outline"></ion-icon>
+    </ion-fab-button> -->
   </ion-fab-list>
 </ion-fab>
