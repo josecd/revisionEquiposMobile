@@ -289,6 +289,10 @@
             </ion-card-header>
             <ion-card-content>
               {{ data.fechaRegistro | date }}
+              <ion-button fill="outline" slot="end" (click)="openModalEdit(data)">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+
             </ion-card-content>
           </ion-card>
         </div>

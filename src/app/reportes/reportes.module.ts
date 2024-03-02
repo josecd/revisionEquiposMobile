@@ -14,6 +14,7 @@ import { AgregarImagenObservacionComponent } from "./componentes/agregar-imagen-
 import { CrearObservacionComponent } from "./componentes/crear-observacion/crear-observacion.component";
 import { CrearReporteComponent } from "./componentes/crear-reporte/crear-reporte.component";
 import { DetalleObservacionComponent } from "./componentes/detalle-observacion/detalle-observacion.component";
+import { EdiarComentarioComponent } from './componentes/ediar-comentario/ediar-comentario.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { DetalleObservacionComponent } from "./componentes/detalle-observacion/d
     AgregarImagenObservacionComponent,
     CrearObservacionComponent,
     CrearReporteComponent,
-    DetalleObservacionComponent
+    DetalleObservacionComponent,
+    EdiarComentarioComponent
   ],
 })
 export class ReportesPageModule {}

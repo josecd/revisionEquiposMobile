@@ -10,6 +10,7 @@ import { CrearObservacionComponent } from '../crear-observacion/crear-observacio
 import * as moment from 'moment-timezone';
 import { SignatureObsComponent } from 'src/app/shared/signature/signatureObs/signature.component';
 import { UsuarioService } from 'src/app/usuarios/usuario.service';
+import { EdiarComentarioComponent } from '../ediar-comentario/ediar-comentario.component';
 
 @Component({
   selector: 'app-detalle-observacion',
@@ -234,6 +235,32 @@ export class DetalleObservacionComponent implements OnInit {
       modal.present();
     }
 
+    async openModal() {
+      // Create and present the modal
+      const modal = await this.modalCtrl.create({
+        component: ImageModalPage,
+        cssClass: 'transparent-modal',
+        componentProps: {
+        }
+      });
+      modal.present();
+    }
+    async openModalEdit(data:any) {
+      // Create and present the modal
+      const modal = await this.modalCtrl.create({
+        component: EdiarComentarioComponent,
+        componentProps: {
+          dataInfo:data
+        }
+      })
+      modal.present();
+       await modal.onWillDismiss().then( f =>{
+        this.load()
+       })
+     
+    }
+    
+    
     openEditComentario(data:any){
       console.log(data);
       this.comentarioEdit = data?.comentario

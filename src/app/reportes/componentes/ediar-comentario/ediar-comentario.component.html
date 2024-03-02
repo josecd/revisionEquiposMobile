@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="ion-margin-horizontal" (click)="return()">
+      <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-buttons>
+    <ion-title>Editar recomendación</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+    <ion-item>
+      <!-- <ion-label position="stacked">Ingrese comentario</ion-label> -->
+      <ion-textarea
+        fill="solid"
+        label="Recomendación"
+        labelPlacement="floating"
+        helperText="Escribe Recomendación"
+        errorText="Invalid Recomendación"
+        [(ngModel)]="comentario"
+        autoGrow="true"
+      ></ion-textarea>
+
+      <!-- <ion-input type="text" placeholder="Comentario" [(ngModel)]="comentario"></ion-input> -->
+    </ion-item>
+    <ion-button expand="block" (click)="editar()">Editar</ion-button>
+
+</ion-content>
+

@@ -100,6 +100,13 @@ export class ReportesService {
     );
   }
 
+  editarComentario(id:any,data: any) {
+    return this._httpClient.put(
+      environment.API_URL + "/observaciones/editarComentario/"+id,
+      data
+    );
+  }
+
   exportPDF(id: any) {
     return this._httpClient.get(environment.API_URL + '/reportes/' + id + '/pdf2');
   }
