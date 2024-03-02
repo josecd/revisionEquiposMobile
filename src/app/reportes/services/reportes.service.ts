@@ -89,6 +89,10 @@ export class ReportesService {
     return this._httpClient.get(environment.API_URL + '/observaciones/' + id);
   }
 
+  deleteObservacion(id: any) {
+    return this._httpClient.delete(environment.API_URL + '/observaciones/' + id);
+  }
+
   crearComentario(data: any) {
     return this._httpClient.post(
       environment.API_URL + "/observaciones/agregarComentario",

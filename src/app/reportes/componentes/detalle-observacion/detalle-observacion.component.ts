@@ -26,6 +26,10 @@ export class DetalleObservacionComponent implements OnInit {
   comentario: any;
   userId: any;
 
+  comentarioEdit: any;
+  idComentarioEdit: any;
+
+
   ///iamgenes
   @ViewChild('swipper')
   swiperRef:ElementRef | undefined;
@@ -230,7 +234,15 @@ export class DetalleObservacionComponent implements OnInit {
       modal.present();
     }
 
+    openEditComentario(data:any){
+      console.log(data);
+      this.comentarioEdit = data?.comentario
+      this.idComentarioEdit = data?.idObservacionComentario
+    }
+
     async openEdit(){
+      console.log(this.informacionObs);
+      
       const modal = await this.modalCtrl.create({
         component: CrearObservacionComponent,
         componentProps: { idReporte:  this.informacionObs.reporteId , editM:true , data:this.informacionObs,tipoReporte:this.informacionObs['tipoReporte']}
@@ -242,6 +254,10 @@ export class DetalleObservacionComponent implements OnInit {
   
       } else {
       }
+    }
+    eliminarObs(){
+      console.log(this.informacionObs);
+
     }
 
     async verificarTexto(){

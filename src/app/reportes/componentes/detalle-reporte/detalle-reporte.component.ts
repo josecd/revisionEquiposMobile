@@ -105,7 +105,47 @@ export class DetalleReporteComponent implements OnInit {
     }
   }
 
+  async eliminarObs(dataInfo: any) {
+    if (dataInfo.idObservacion) {
+      const alert = await this.alertController.create({
+        header: "Alerta",
+        message: "¿Desea eliminar la observación?",
+        buttons: [
+          {
+            text: "Cancelar",
+            role: "cancel",
+            handler: () => {
+              console.log("Declined the offer");
+            },
+          },
+          {
+            text: "Aceptar",
+            handler: async () => {
+              const loading = await this.loadingCtrl.create({
+                message: 'Borrando...',
+              });
+              loading.present();
+  
+              this._reportes.deleteObservacion(dataInfo.idObservacion).subscribe({
+                next: (data) => {
+                  loading.dismiss();
+                  this.getReporte();
+                },
+                error(err) { },
+              });
+            },
+          },
+        ],
+      });
+  
+      await alert.present();
+    }
 
+
+    
+    
+  }
+  
 
   async openModalFirma() {
     const modal = await this.modalCtrl.create({
